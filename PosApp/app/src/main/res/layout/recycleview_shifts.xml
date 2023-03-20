@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="190dp">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:text="Name"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="match_parent"
+        android:textColor="@color/black"
+        android:text="Time"
+        android:textSize="40dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/deleteUserID"-->
+<!--        android:layout_width="64dp"-->
+<!--        android:layout_height="79dp"-->
+<!--        android:layout_marginTop="52dp"-->
+<!--        android:layout_marginEnd="28dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/tvName"-->
+<!--        app:srcCompat="@drawable/delete"-->
+<!--        android:onClick="onDeleteButtonClicked"/>-->
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="match_parent"
+        android:text="Date"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+    <ImageButton
+        android:id="@+id/deleteUserID"
+        android:layout_width="68dp"
+        android:layout_height="62dp"
+        android:layout_marginEnd="52dp"
+        android:background="#13D9F3"
+        android:onClick="onDeleteButtonClicked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

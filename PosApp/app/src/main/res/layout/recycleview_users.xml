@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="1062dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="220dp"
+        android:text="Name"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvCode"
+        android:layout_width="1062dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="0dp"
+        android:text="Code"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvName"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/tvName"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+    <ImageView
+        android:id="@+id/deleteUserID"
+        android:layout_width="64dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvName"
+        app:srcCompat="@drawable/delete" />
+
+    <TextView
+        android:id="@+id/tvPass"
+        android:layout_width="1062dp"
+        android:layout_height="57dp"
+        android:text="Pass"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvCode"
+        app:layout_constraintStart_toStartOf="@+id/tvCode"
+        app:layout_constraintTop_toBottomOf="@+id/tvCode" />
+" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

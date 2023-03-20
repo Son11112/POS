@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FragmentAddMenu">
+
+    <EditText
+        android:id="@+id/edtQuantity"
+        android:layout_width="852dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="124dp"
+        android:ems="10"
+        android:hint="数量"
+        android:inputType="number"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/edtProductName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtProductName"
+        app:layout_constraintTop_toBottomOf="@+id/edtProductName" />
+
+    <Button
+        android:id="@+id/btnAddMenu"
+        android:layout_width="216dp"
+        android:layout_height="71dp"
+        android:layout_marginEnd="16dp"
+        android:text="追加へ"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="216dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="16dp"
+        android:text="戻る"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+
+    <EditText
+        android:id="@+id/edtProductName"
+        android:layout_width="852dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="132dp"
+        android:ems="10"
+        android:hint="品名"
+        android:minHeight="48dp"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.467"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/cbxMainFood"
+        android:layout_width="215dp"
+        android:layout_height="107dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="16dp"
+        android:text="主食"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/cbxDessert"
+        android:layout_width="215dp"
+        android:layout_height="107dp"
+        android:layout_marginStart="92dp"
+        android:text="デザート"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cbxMainFood"
+        app:layout_constraintStart_toEndOf="@+id/cbxMainFood"
+        app:layout_constraintTop_toTopOf="@+id/cbxMainFood"
+        app:layout_constraintVertical_bias="0.426" />
+
+    <CheckBox
+        android:id="@+id/cbxDrink"
+        android:layout_width="215dp"
+        android:layout_height="107dp"
+        android:layout_marginStart="92dp"
+        android:text="飲み物"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cbxDessert"
+        app:layout_constraintStart_toEndOf="@+id/cbxDessert"
+        app:layout_constraintTop_toTopOf="@+id/cbxDessert"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddImage"
+        android:layout_width="59dp"
+        android:layout_height="58dp"
+        android:layout_marginEnd="136dp"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:src="@android:drawable/ic_menu_camera"
+        app:layout_constraintBottom_toBottomOf="@+id/imgImage"
+        app:layout_constraintEnd_toStartOf="@+id/imgImage"
+        app:layout_constraintTop_toTopOf="@+id/imgImage"
+        app:layout_constraintVertical_bias="0.057" />
+
+    <EditText
+        android:id="@+id/edtPrice"
+        android:layout_width="852dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="価格"
+        android:inputType="number"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/edtProductName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtProductName"
+        app:layout_constraintTop_toBottomOf="@+id/edtProductName" />
+
+    <ImageView
+        android:id="@+id/imgImage"
+        android:layout_width="453dp"
+        android:layout_height="241dp"
+        android:layout_marginTop="132dp"
+        app:layout_constraintEnd_toEndOf="@+id/edtPrice"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/edtPrice"
+        app:layout_constraintTop_toBottomOf="@+id/edtPrice" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="72dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="48dp"
+        android:gravity="bottom"
+        android:text="個"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView6"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/edtPrice"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="72dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="bottom"
+        android:text="円"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPrice"
+        app:layout_constraintStart_toEndOf="@+id/edtPrice" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

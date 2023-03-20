@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="position"
+    android:orientation="horizontal"
+    android:background="#C3EADB"
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+
+    <ImageView
+        android:id="@+id/imgItem"
+        android:layout_width="303dp"
+        android:background="@drawable/rim_bg"
+        android:layout_height="169dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/main_food" />
+
+    <TextView
+        android:id="@+id/tvNameItem"
+        android:layout_width="504dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="32dp"
+        android:text="品名"
+        android:textColor="@color/black"
+        android:textSize="45dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgItem"
+        app:layout_constraintStart_toEndOf="@+id/imgItem"
+        app:layout_constraintTop_toTopOf="@+id/imgItem"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="120dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="28dp"
+        android:text="1000"
+        android:gravity="right"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvNameItem"
+        app:layout_constraintHorizontal_bias="0.177"
+        app:layout_constraintStart_toStartOf="@+id/tvNameItem"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameItem" />
+
+    <TextView
+        android:id="@+id/tvQuantityOfStock"
+        android:layout_width="120dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="28dp"
+        android:textColor="@color/black"
+        android:text="100"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvNameItem"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/tvNameItem"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameItem" />
+
+    <TextView
+        android:id="@+id/tvOther"
+        android:layout_width="80dp"
+        android:layout_height="55dp"
+        android:text="在庫:"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvQuantityOfStock"
+        app:layout_constraintEnd_toStartOf="@+id/tvQuantityOfStock"
+        app:layout_constraintTop_toTopOf="@+id/tvQuantityOfStock"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/tvOthers"
+        android:layout_width="80dp"
+        android:layout_height="55dp"
+        android:text="価格:"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
+        app:layout_constraintEnd_toStartOf="@+id/tvPrice"
+        app:layout_constraintTop_toTopOf="@+id/tvPrice"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnDecreaseQuantity"
+        android:layout_width="79dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="8dp"
+        android:textSize="30dp"
+        android:text="－"
+        app:layout_constraintEnd_toEndOf="@+id/btnIncreaseQuantity"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnIncreaseQuantity"
+        app:layout_constraintTop_toBottomOf="@+id/btnIncreaseQuantity" />
+
+    <TextView
+        android:id="@+id/tvQuantityOfCart"
+        android:layout_width="120dp"
+        android:layout_height="73dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/black"
+        android:text="0"
+        android:textSize="40dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/btnDecreaseQuantity"
+        app:layout_constraintEnd_toStartOf="@+id/btnIncreaseQuantity"
+        app:layout_constraintTop_toTopOf="@+id/btnIncreaseQuantity"
+        app:layout_constraintVertical_bias="0.592" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="80dp"
+        android:layout_height="73dp"
+        android:textSize="30dp"
+        android:text="数量:"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/tvQuantityOfCart"
+        app:layout_constraintEnd_toStartOf="@+id/tvQuantityOfCart"
+        app:layout_constraintTop_toTopOf="@+id/tvQuantityOfCart" />
+
+    <Button
+        android:id="@+id/btnIncreaseQuantity"
+        android:layout_width="79dp"
+        android:layout_height="79dp"
+        android:layout_marginStart="292dp"
+        android:onClick="clickListener"
+        android:text="＋"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNameItem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tvNameItem"
+        app:layout_constraintTop_toTopOf="@+id/tvNameItem"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:textColor="@color/black"
+        android:text="円"
+        android:gravity="center"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
+        app:layout_constraintStart_toEndOf="@+id/tvPrice"
+        app:layout_constraintTop_toTopOf="@+id/tvPrice"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:text=""
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvNameItem"
+        app:layout_constraintVertical_bias="1.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

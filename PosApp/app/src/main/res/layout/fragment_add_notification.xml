@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentAddNotification">
+
+    <DatePicker
+        android:id="@+id/datePicker3"
+        android:layout_width="601dp"
+        android:layout_height="289dp"
+        android:layout_marginTop="64dp"
+        android:datePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnAddNotification"
+        android:layout_width="216dp"
+        android:layout_height="71dp"
+        android:layout_marginEnd="16dp"
+        android:text="追加する"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.954" />
+
+    <Button
+        android:id="@+id/btnExitToNotification"
+        android:layout_width="216dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="16dp"
+        android:text="戻る"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+
+    <EditText
+        android:id="@+id/edtSubject"
+        android:layout_width="842dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="件名"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.543"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePicker3" />
+
+    <EditText
+        android:id="@+id/edtDetailed"
+        android:layout_width="843dp"
+        android:layout_height="186dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="詳細、内容を記入してください。"
+        app:layout_constraintEnd_toEndOf="@+id/edtSubject"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/edtSubject"
+        app:layout_constraintTop_toBottomOf="@+id/edtSubject" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
