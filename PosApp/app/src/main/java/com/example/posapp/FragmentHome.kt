@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapp.data.ShiftsAdapter
+import com.example.myapp.data.ShiftsHomeAdapter
 import com.example.posapp.viewModel.ShiftsViewModel
 import com.example.posapp.viewModel.ShiftsViewModelFactory
 import com.example.posapp.data.MyRoomDatabase
@@ -23,7 +23,6 @@ import java.util.*
 
 class FragmentHome : Fragment() {
 
-    private lateinit var shiftsAdapter: ShiftsAdapter
     private lateinit var shiftsViewModel: ShiftsViewModel
     val CITY: String = "TOKYO"
     val API: String = "95cc384a7b07fecdae34df05a1c43365"
@@ -88,7 +87,7 @@ class FragmentHome : Fragment() {
         // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
         shiftsViewModel.getAllShifts().observe(viewLifecycleOwner) { shifts ->
             Log.d(ContentValues.TAG, "Shifts $shifts")
-            val adapter = ShiftsAdapter(requireContext(), shifts)
+            val adapter = ShiftsHomeAdapter(requireContext(), shifts)
             recyclerView.adapter = adapter
         }
     }

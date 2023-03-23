@@ -20,9 +20,7 @@ import com.example.posapp.data.MyRoomDatabase
 import com.example.posapp.databinding.FragmentCartBinding
 import com.example.posapp.viewModel.MenuViewModel
 import com.example.posapp.viewModel.MenuViewModelFactory
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FragmentCart : Fragment() {
 

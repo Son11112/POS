@@ -3,10 +3,8 @@ package com.example.posapp.viewModel
 import android.net.Uri
 import android.os.Bundle
 import androidx.lifecycle.*
-import androidx.room.Update
 import com.example.posapp.dao.MenuDao
 import com.example.posapp.data.MenuData
-import com.example.posapp.data.OrderFoodItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,7 +25,6 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
         return menuDao.getTempMenu()
     }
 
-
     fun getMainFoods(): LiveData<List<MenuData>> {
         return menuDao.getMainFoods()
     }
@@ -38,9 +35,46 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
         }
     }
 
+    suspend fun updateQuantityInStock(id: Int, QuantityInStock: Int) {
+        withContext(Dispatchers.IO) {
+            menuDao.updateQuantityInStock(id, QuantityInStock)
+        }
+    }
+
     suspend fun resetTempQuantity() {
         withContext(Dispatchers.IO) {
             menuDao.resetTempQuantity()
+        }
+    }
+
+    suspend fun updateMenu(
+        id: Int,
+        productKinds: String,
+        productType: String,
+        productName: String,
+        productPrice: Int,
+        productQuantity: Int,
+        productImage: ByteArray?,
+        tempQuantityInCart: Int
+    ) {
+        withContext(Dispatchers.IO) {
+            val menuData = MenuData(
+                id = id,
+                productKinds = productKinds,
+                productType = productType,
+                productName = productName,
+                productPrice = productPrice,
+                productQuantity = productQuantity,
+                productImage = productImage,
+                tempQuantityInCart = tempQuantityInCart,
+            )
+            menuDao.update(menuData)
+        }
+    }
+
+    suspend fun deleteMenu(id: Int) {
+        withContext(Dispatchers.IO) {
+            menuDao.deleteMenu(id)
         }
     }
 

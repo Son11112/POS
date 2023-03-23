@@ -64,21 +64,25 @@ class FragmentOrders : Fragment() {
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
 
         // Khởi tạo adapter
-        orderAdapter =
-            OrderAdapter(requireContext(), mutableListOf(), menuViewModel)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.OrderRecyclerview)
+        orderAdapter = OrderAdapter(requireContext(), mutableListOf(), menuViewModel)
+        val recyclerView = binding.OrderRecyclerview
         recyclerView.adapter = orderAdapter
 
         // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
         menuViewModel.getAllMenu().observe(viewLifecycleOwner) { menu ->
-            Log.d(TAG, "Menu $menu")
             orderAdapter.setData(menu)
+        }
+
+        binding.btnAdd.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                updateCartItems()
+            }
         }
 
         binding.btnOrder.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 updateCartItems()
-                findNavController().navigate(R.id.action_fragmentOrders_to_fragmentCheckOrder)
+                findNavController().navigate(R.id.action_fragmentOrders_to_fragmentStatus)
             }
         }
 
@@ -90,23 +94,20 @@ class FragmentOrders : Fragment() {
         }
 
         binding.btnMainFood.setOnClickListener {
-            menuViewModel.getMainFoods().observe(viewLifecycleOwner) { menu ->
-                Log.d(TAG, "Menu $menu")
-                orderAdapter.setData(menu)
+                menuViewModel.getMainFoods().observe(viewLifecycleOwner) { menu ->
+                    orderAdapter.setData(menu)
+                }
             }
-        }
         binding.btnDessert.setOnClickListener {
-            menuViewModel.getDesserts().observe(viewLifecycleOwner) { menu ->
-                Log.d(TAG, "Menu $menu")
-                orderAdapter.setData(menu)
+                menuViewModel.getDesserts().observe(viewLifecycleOwner) { menu ->
+                    orderAdapter.setData(menu)
+                }
             }
-        }
         binding.btnDrink.setOnClickListener {
-            menuViewModel.getDrinks().observe(viewLifecycleOwner) { menu ->
-                Log.d(TAG, "Menu $menu")
-                orderAdapter.setData(menu)
+                menuViewModel.getDrinks().observe(viewLifecycleOwner) { menu ->
+                    orderAdapter.setData(menu)
+                }
             }
-        }
         binding.btnLogOut.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentOrders_to_fragmentLogin)
         }
@@ -116,26 +117,15 @@ class FragmentOrders : Fragment() {
     suspend fun updateCartItems() {
 
         val itemCount = orderAdapter.itemCount
-        val items = mutableListOf<MenuData>()
+        val menuData = mutableListOf<MenuData>()
         for (i in 0 until itemCount) {
             val item = orderAdapter.getItem(i)
-            items.add(item)
+            menuData.add(item)
         }
-
-//        val filteredMenuData = items.filter { it.tempQuantityInCart != 0 }
-
-//        if (filteredMenuData.isNotEmpty()) {
-            for (menuData in items) {
+            for (item in menuData) {
                 // Cập nhật số lượng tempQuantityInCart vào cơ sở dữ liệu
-                menuViewModel.updateTempQuantityInCart(menuData.id, menuData.tempQuantityInCart)
+                menuViewModel.updateTempQuantityInCart(item.id, item.tempQuantityInCart)
             }
-//        } else {
-//            withContext(Dispatchers.Main) {
-//                Toast.makeText(context, "カートは空です", Toast.LENGTH_SHORT).show()
-//                    // Cập nhật số lượng tempQuantityInCart vào cơ sở dữ liệu
-//                    menuViewModel.resetTempQuantity()
-//                }
-//            }
         }
 
     override fun onDestroyView() {

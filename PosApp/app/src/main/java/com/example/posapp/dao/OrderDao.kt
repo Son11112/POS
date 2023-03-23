@@ -24,8 +24,11 @@ interface OrderDao {
     @Query("UPDATE orders_table SET total_price = :totalPrice WHERE id = :id")
     suspend fun updateTotalPrice(id: Int, totalPrice: Int)
 
-    @Query("UPDATE orders_table SET total_price = :totalPrice WHERE id = :id")
-    suspend fun updateStatus(id: Int, totalPrice: Int)
+    @Query("UPDATE orders_table SET order_status = :orderStatus WHERE id = :id")
+    suspend fun updateStatus(id: Int, orderStatus: String)
+
+    @Query("UPDATE orders_table SET order_status = :orderStatus WHERE id = :id")
+    suspend fun cancelOrder(id: Int, orderStatus: String)
 
     @Update
     suspend fun update(ordersData: OrdersData)

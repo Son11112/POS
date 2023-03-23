@@ -152,23 +152,14 @@
         android:label="fragment_orders"
         tools:layout="@layout/fragment_orders" >
         <action
-            android:id="@+id/action_fragmentOrders_to_fragmentCheckOrder"
-            app:destination="@id/fragmentCheckOrder" />
-        <action
             android:id="@+id/action_fragmentOrders_to_fragmentCart"
             app:destination="@id/fragmentCart" />
         <action
             android:id="@+id/action_fragmentOrders_to_fragmentLogin"
             app:destination="@id/fragmentLogin" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentCheckOrder"
-        android:name="com.example.posapp.FragmentCheckOrder"
-        android:label="fragment_check_order"
-        tools:layout="@layout/fragment_check_order" >
         <action
-            android:id="@+id/action_fragmentCheckOrder_to_fragmentOrders"
-            app:destination="@id/fragmentOrders" />
+            android:id="@+id/action_fragmentOrders_to_fragmentStatus"
+            app:destination="@id/fragmentStatus" />
     </fragment>
     <fragment
         android:id="@+id/fragmentCart"

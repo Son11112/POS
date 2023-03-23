@@ -32,9 +32,8 @@ class FragmentPay : Fragment() {
     private lateinit var orderViewModel: OrderViewModel
     private lateinit var menuViewModel: MenuViewModel
     private lateinit var _binding: FragmentPayBinding
-    private val binding get() = _binding!!
+    private val binding get() = _binding
     val menuData = mutableListOf<MenuData>()
-    // Lấy thời gian hiện tại
     private val calendar = Calendar.getInstance()
     private val orderDates = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(calendar.time)
     private val orderTimes = SimpleDateFormat("HHmmss", Locale.getDefault()).format(calendar.time)
@@ -43,7 +42,6 @@ class FragmentPay : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentPayBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -68,11 +66,11 @@ class FragmentPay : Fragment() {
         menuViewModel = ViewModelProvider(this, factory).get(MenuViewModel::class.java)
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
 
-        val totalPrice = arguments?.getInt("totalPrice")
-        binding.paymentAmountEditText.text = totalPrice.toString()+"円"
+        var totalPrice = arguments?.getInt("totalPrice")
+        binding.paymentAmountEditText.text = totalPrice.toString() + "円"
 
         binding.btnCash.isChecked = true
-        binding.btnStatus.visibility = View.GONE
+        binding.btnStatus.isEnabled = false
 
         binding.edtDepositAmount.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -86,7 +84,7 @@ class FragmentPay : Fragment() {
                 if (depositAmount.isNotEmpty()) {
                     val changeNumber = depositAmount.toInt() - totalPrice.toString().toInt()
                     if (changeNumber > 0) {
-                        binding.edtChange.text = changeNumber.toString()+"円"
+                        binding.edtChange.text = changeNumber.toString() + "円"
                     } else {
                         binding.edtChange.text = "0円"
                     }
@@ -105,7 +103,7 @@ class FragmentPay : Fragment() {
                 binding.edtChange.visibility = View.VISIBLE
                 binding.tvChange.visibility = View.VISIBLE
                 binding.imvPayPay.visibility = View.GONE
-            }else{
+            } else {
                 binding.imvPayPay.visibility = View.VISIBLE // Hiển thị imageView
                 binding.edtDepositAmount.visibility = View.GONE // Ẩn editTextNumber
                 binding.tvDepositAmount.visibility = View.GONE // Ẩn editTextNumber
@@ -119,26 +117,42 @@ class FragmentPay : Fragment() {
         }
 
         binding.btnPay.setOnClickListener {
-            if (binding.btnCash.isChecked){
-                val depositAmount = binding.edtDepositAmount.text.toString()
-                if (depositAmount.isNotEmpty()) {
-                    val changeNumber = depositAmount.toInt() - totalPrice.toString().toInt()
+            if (binding.btnCash.isChecked) {
+                if (binding.edtDepositAmount.text.toString().isNotEmpty()) {
+                    val changeNumber =
+                        binding.edtDepositAmount.text.toString().toInt() - totalPrice.toString()
+                            .toInt()
                     if (changeNumber >= 0) {
                         binding.btnStatus.visibility = View.VISIBLE
-                        binding.btnPay.visibility = View.GONE
                         Toast.makeText(context, "注文を確定しました", Toast.LENGTH_SHORT).show()
-//                      cập nhật database
+//                  cập nhật database
                         addNewItem()
-                    }else{
+                        binding.btnStatus.isEnabled = true
+                        binding.btnPayPay.isEnabled = false
+                        binding.btnCash.isEnabled = false
+                        binding.btnCancel.isEnabled = false
+                        binding.btnPay.isEnabled = false
+                    } else {
                         Toast.makeText(context, "お金が足りませんでした！", Toast.LENGTH_SHORT).show()
                     }
-                }else{
-                    Toast.makeText(context, "カートが空です", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "お金が足りませんでした", Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                addNewItem()
+                binding.btnStatus.visibility = View.VISIBLE
+                binding.btnStatus.isEnabled = true
+                binding.btnPayPay.isEnabled = false
+                binding.btnCash.isEnabled = false
+                binding.btnCancel.isEnabled = false
+                binding.btnPay.isEnabled = false
+                Toast.makeText(context, "注文を確定しました", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.btnStatus.setOnClickListener {
+            binding.edtDepositAmount.setText(null)
+            binding.edtChange.setText(null)
             findNavController().navigate(R.id.action_fragmentPay_to_fragmentStatus)
         }
     }
@@ -162,32 +176,37 @@ class FragmentPay : Fragment() {
         }
     }
 
+
     @SuppressLint("SuspiciousIndentation")
     private fun addNewItem() {
 
         val filteredMenuData = menuData.filter { it.tempQuantityInCart > 0 }
         if (filteredMenuData.isNotEmpty()) {
-            // Lấy thời gian hiện tại
+
             val calendar = Calendar.getInstance()
-            val orderDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-            val orderTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(calendar.time)
+            val orderDate =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            val orderTime =
+                SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(calendar.time)
             val totalPrice = arguments?.getInt("totalPrice")
             val ordersData = OrdersData(
-                orderId= orderDates+orderTimes,
+                orderId = orderDates + orderTimes,
                 orderStatus = "on_order",
                 totalPrice = totalPrice!!,
                 orderDate = orderDate,
-                orderTime = orderTime)
-
+                orderTime = orderTime
+            )
             orderViewModel.insertOrder(ordersData)
+
             filteredMenuData.map { menu ->
                 val totalPrice = arguments?.getInt("totalPrice")
                 val ordersData = OrdersData(
-                    orderId= orderDates+orderTimes,
+                    orderId = orderDates + orderTimes,
                     orderStatus = "on_order",
                     totalPrice = totalPrice!!,
                     orderDate = orderDate,
-                    orderTime = orderTime)
+                    orderTime = orderTime
+                )
 
                 val orderFoodItems = OrderFoodItem(
                     orderId = ordersData.orderId,
@@ -203,10 +222,11 @@ class FragmentPay : Fragment() {
 
             filteredMenuData.forEach { menu ->
                 CoroutineScope(Dispatchers.Main).launch {
+                    menuViewModel.updateQuantityInStock(menu.id, menu.productQuantity-menu.tempQuantityInCart)
                     menuViewModel.updateTempQuantityInCart(menu.id, 0)
                 }
             }
-        }else {
+        } else {
             Toast.makeText(context, "カートは空です", Toast.LENGTH_SHORT).show()
         }
     }

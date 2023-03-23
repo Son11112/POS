@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.posapp.data.MenuData
-import com.example.posapp.data.OrderFoodItem
 import com.example.posapp.databinding.RecyclerviewCartBinding
 
 class CartAdapter(

@@ -4,8 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_fragment"
     tools:context=".FragmentUsers">
 
+
+    <TextView
+        android:layout_width="450dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:text="シフト管理"
+        android:textColor="@color/black"
+        android:textSize="80dp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnToAddShift"
@@ -33,12 +47,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Shiftsrecycleview"
-        android:layout_width="1019dp"
+        android:layout_width="match_parent"
         android:layout_height="520dp"
         android:layout_marginTop="96dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

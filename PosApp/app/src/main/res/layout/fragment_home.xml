@@ -228,7 +228,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Shiftsrecycleview"
                     android:layout_width="425dp"
-                    android:layout_height="487dp"
+                    android:layout_height="420dp"
                     android:layout_marginTop="16dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"

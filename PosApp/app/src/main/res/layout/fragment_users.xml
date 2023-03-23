@@ -3,9 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/background_fragment"
     android:layout_height="match_parent"
     tools:context=".FragmentUsers">
 
+
+    <TextView
+        android:layout_width="450dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="従業員管理"
+        android:textColor="@color/black"
+        android:textSize="80dp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnExtUserToHome"
@@ -32,7 +47,7 @@
         app:layout_constraintVertical_bias="0.954"  />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="1019dp"
+        android:layout_width="match_parent"
         android:id="@+id/UsersRecycleview"
         android:layout_height="520dp"
         android:layout_marginTop="100dp"

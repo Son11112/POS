@@ -70,6 +70,18 @@ class OrderViewModel(
         }
     }
 
+    fun upDateStatus(id: Int, orderStatus : String) {
+        viewModelScope.launch {
+            orderDao.updateStatus(id, orderStatus)
+        }
+    }
+
+    fun cancelOrder(id: Int, orderStatus : String) {
+        viewModelScope.launch {
+            orderDao.cancelOrder(id, orderStatus)
+        }
+    }
+
     fun deleteOrder(orderId: Int, id: Int) {
         viewModelScope.launch {
             orderDao.deleteById(id)

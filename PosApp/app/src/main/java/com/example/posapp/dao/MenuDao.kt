@@ -31,6 +31,9 @@ interface MenuDao {
     @Query("UPDATE menu_table SET temp_quantity_in_cart = :quantity WHERE id = :id")
     suspend fun updateTempQuantityInCart(id: Int, quantity: Int)
 
+    @Query("UPDATE menu_table SET quantity_in_stock = :QuantityInStock WHERE id = :id")
+    suspend fun updateQuantityInStock(id: Int, QuantityInStock: Int)
+
     @Query("SELECT * FROM menu_table WHERE temp_quantity_in_cart > 0")
      fun getSelectedMenuWithQuantity(): LiveData<List<MenuData>>
 
@@ -45,6 +48,9 @@ interface MenuDao {
 
     @Query("SELECT * FROM menu_table WHERE temp_quantity_in_cart != 0")
     fun getTempMenu(): LiveData<List<MenuData>>
+
+    @Query("DELETE FROM menu_table WHERE id=:id")
+    suspend fun deleteMenu(id: Int)
 
     @Update
     suspend fun update(menuData: MenuData)
