@@ -62,22 +62,10 @@ class FragmentAddShift : Fragment() {
             timeShifts = "夕方 "
         }
 
-    return view
-}
-
-    private fun isEntryValid(): Boolean {
-        return viewModel.isEntryValid(
-            binding.edtName.text.toString(),
-            "${binding.datePicker.year}-${binding.datePicker.month}-${binding.datePicker.dayOfMonth}",
-            timeShifts,
-        )
+        return view
     }
 
-    /**
-     * Inserts the new Item into database and navigates up to list fragment.
-     */
     private fun addNewItem() {
-        if (isEntryValid()) {
             viewModel.addNewItem(
                 binding.edtName.text.toString(),
                 "${binding.datePicker.year}-${binding.datePicker.month}-${binding.datePicker.dayOfMonth}",
@@ -88,7 +76,6 @@ class FragmentAddShift : Fragment() {
             binding.cbxMorning.isChecked = false
             binding.cbxNoon.isChecked = false
             binding.cbxNight.isChecked = false
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,17 +84,13 @@ class FragmentAddShift : Fragment() {
             Toast.makeText(getActivity(), "追加しました！", Toast.LENGTH_SHORT).show()
             addNewItem()
         }
-        binding.btnExitToShifts.setOnClickListener{
+        binding.btnExitToShifts.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentAddShift_to_fragmentShifts)
         }
     }
 
-    /**
-     * Called before fragment is destroyed.
-     */
     override fun onDestroyView() {
         super.onDestroyView()
-        // Hide keyboard.
         val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as
                 InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)

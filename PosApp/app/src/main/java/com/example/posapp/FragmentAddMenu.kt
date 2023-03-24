@@ -33,6 +33,7 @@ class FragmentAddMenu : Fragment() {
     private var selectedCheckbox: CheckBox? = null
     private var _binding: FragmentAddMenuBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: MenuViewModel by activityViewModels {
         MenuViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).menuDao()
@@ -49,11 +50,10 @@ class FragmentAddMenu : Fragment() {
     ): View {
         _binding = FragmentAddMenuBinding.inflate(inflater, container, false)
         val view = binding.root
-        val checkboxMainFood = binding.cbxMainFood
-        val checkboxDessert = binding.cbxDessert
-        val checkboxDrink = binding.cbxDrink
+         val checkboxMainFood = binding.cbxMainFood
+         val checkboxDessert = binding.cbxDessert
+         val checkboxDrink = binding.cbxDrink
         imageView = binding.imgImage
-
         checkboxMainFood.setOnClickListener {
             selectedCheckbox = checkboxMainFood
             checkboxDessert.isChecked = false
@@ -86,8 +86,22 @@ class FragmentAddMenu : Fragment() {
             findNavController().navigate(R.id.action_fragmentAddMenu_to_fragmentMenu)
         }
         binding.btnAddMenu.setOnClickListener {
-            Toast.makeText(getActivity(), "追加しました！", Toast.LENGTH_SHORT).show()
-            addNewItem()
+             val edtName = binding.edtProductName
+             val edtPrice = binding.edtPrice
+             val edtQuantity = binding.edtQuantity
+             val imgMenu = binding.imgImage
+            val checkboxMainFood = binding.cbxMainFood
+            val checkboxDessert = binding.cbxDessert
+            val checkboxDrink = binding.cbxDrink
+
+            if (checkboxMainFood.isChecked||checkboxDrink.isChecked||checkboxDessert.isChecked
+                &&edtName.text.isNotBlank() &&imgMenu.drawable.isVisible
+                &&edtPrice.text.isNotBlank() &&edtQuantity.text.isNotBlank()) {
+                addNewItem()
+                Toast.makeText(getActivity(), "追加しました！", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context, "未入力項目があります！", Toast.LENGTH_SHORT).show()
+            }
         }
         viewModel.restoreInstanceState(savedInstanceState)
         binding.btnAddImage.setOnClickListener {

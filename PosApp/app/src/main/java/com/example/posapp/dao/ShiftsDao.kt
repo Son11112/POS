@@ -13,11 +13,14 @@ import com.example.posapp.data.ShiftsData
 @Dao
 interface ShiftsDao {
 
-    @Query("SELECT * from shifts_Table ORDER BY name ASC")
+    @Query("SELECT * from shifts_table ORDER BY name ASC")
     fun getItems(): LiveData<List<ShiftsData>>
 
-    @Query("SELECT * from shifts_Table WHERE id = :id")
+    @Query("SELECT * from shifts_table WHERE id = :id")
     fun getItem(id: Int): LiveData<ShiftsData>
+
+    @Query("DELETE FROM shifts_table WHERE id=:id")
+    suspend fun deleteShift(id: Int)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(shiftsData: ShiftsData)

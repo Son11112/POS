@@ -1,8 +1,6 @@
 package com.example.posapp
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,7 +52,7 @@ class FragmentMenu : Fragment() {
 
         // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
         menuViewModel.getAllMenu().observe(viewLifecycleOwner) { menu ->
-            menuAdapter = MenuAdapter(requireContext(), menu,menuViewModel)
+            menuAdapter = MenuAdapter(requireContext(), menu, menuViewModel)
             recyclerView.adapter = menuAdapter
         }
         binding.btnExt.setOnClickListener {

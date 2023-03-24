@@ -60,7 +60,6 @@ class FragmentPay : Fragment() {
         val factory = MenuViewModelFactory(MyRoomDatabase.getDatabase(requireContext()).menuDao())
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
-            MyRoomDatabase.getDatabase(requireContext()).menuDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
         )
         menuViewModel = ViewModelProvider(this, factory).get(MenuViewModel::class.java)

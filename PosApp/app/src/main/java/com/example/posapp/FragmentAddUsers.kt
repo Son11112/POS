@@ -36,8 +36,6 @@ class FragmentAddUsers : Fragment() {
     ): View? {
         _binding = FragmentAddUsersBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        // Initialize views here
         val checkboxAdmin = binding.cbxAdmin
         val checkboxStaff = binding.cbxStaff
         val editTextEmployerCode: EditText = view.findViewById(R.id.edtEmployerCode)
@@ -67,7 +65,7 @@ class FragmentAddUsers : Fragment() {
         }
         return view
     }
-    fun addStaff() {
+    private fun addStaff() {
         viewModel.addNewItem(
             role,
             binding.edtName.text.toString(),
@@ -80,7 +78,7 @@ class FragmentAddUsers : Fragment() {
         binding.edtPass.setText("")
     }
 
-    fun addNewItem() {
+    private fun addAd() {
             viewModel.addNewItem(
                 role,
                 binding.edtName.text.toString(),
@@ -113,7 +111,7 @@ class FragmentAddUsers : Fragment() {
                 editEmployerName.text.isNotBlank()
             ) {
                 Toast.makeText(getActivity(), "追加しました。", Toast.LENGTH_LONG).show()
-                addNewItem()
+                addAd()
 
             } else if (checkboxStaff.isChecked &&
                 editTextEmployerCode.text.isNotBlank() &&

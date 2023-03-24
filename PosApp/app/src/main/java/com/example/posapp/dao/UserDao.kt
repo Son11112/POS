@@ -28,9 +28,15 @@ interface UserDao {
     @Delete
     suspend fun delete(userData: UserData)
 
-    @Query("SELECT * FROM user_Table WHERE employee_code = :employeeCode")
+    @Query("SELECT * FROM user_table WHERE employee_code = :employeeCode")
     suspend fun getUserByEmployeeCode(employeeCode: String): UserData
 
-    @Query("SELECT * FROM user_Table ORDER BY name ASC")
+    @Query("SELECT * FROM user_table WHERE password = :password")
+    suspend fun getUserByEmployeePass(password: String): UserData
+
+    @Query("SELECT * FROM user_table ORDER BY name ASC")
     fun getAllUser(): LiveData<List<UserData>>
+
+    @Query("DELETE FROM user_table WHERE id=:id")
+    suspend fun deleteEmployee(id: Int)
 }

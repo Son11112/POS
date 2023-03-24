@@ -57,7 +57,6 @@ class FragmentOrders : Fragment() {
         val factory = MenuViewModelFactory(MyRoomDatabase.getDatabase(requireContext()).menuDao())
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
-            MyRoomDatabase.getDatabase(requireContext()).menuDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
         )
         menuViewModel = ViewModelProvider(this, factory).get(MenuViewModel::class.java)
@@ -73,11 +72,11 @@ class FragmentOrders : Fragment() {
             orderAdapter.setData(menu)
         }
 
-        binding.btnAdd.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                updateCartItems()
-            }
-        }
+//        binding.btnAdd.setOnClickListener {
+//            viewLifecycleOwner.lifecycleScope.launch {
+//                updateCartItems()
+//            }
+//        }
 
         binding.btnOrder.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {

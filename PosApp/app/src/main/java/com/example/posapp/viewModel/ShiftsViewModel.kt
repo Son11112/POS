@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.posapp.dao.ShiftsDao
 import com.example.posapp.data.ShiftsData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ShiftsViewModel(private val shiftsDao: ShiftsDao) : ViewModel() {
 
@@ -28,6 +30,12 @@ class ShiftsViewModel(private val shiftsDao: ShiftsDao) : ViewModel() {
     private fun insertItem(shiftsData: ShiftsData) {
         viewModelScope.launch {
             shiftsDao.insert(shiftsData)
+        }
+    }
+
+    suspend fun deleteShift(id: Int) {
+        withContext(Dispatchers.IO) {
+            shiftsDao.deleteShift(id)
         }
     }
 

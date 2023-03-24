@@ -13,6 +13,7 @@ import com.example.posapp.data.OrdersData
 
 @Dao
 interface MenuDao {
+
     @Query("SELECT * from menu_table ORDER BY name ASC")
     fun getItems(): LiveData<List<MenuData>>
 

@@ -43,7 +43,6 @@ class FragmentStatus : Fragment() {
         // Khởi tạo ViewModel
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
-            MyRoomDatabase.getDatabase(requireContext()).menuDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
         )
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)

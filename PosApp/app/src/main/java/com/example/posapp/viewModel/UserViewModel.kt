@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.posapp.dao.UserDao
 import com.example.posapp.data.UserData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
@@ -35,9 +37,12 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
         }
     }
 
-    suspend fun getRoleByEmployeeCode(employeeCode: String): UserData {
-        return userDao.getUserByEmployeeCode(employeeCode)
+    suspend fun deleteEmployee(id: Int) {
+        withContext(Dispatchers.IO) {
+            userDao.deleteEmployee(id)
+        }
     }
+
 }
 
 

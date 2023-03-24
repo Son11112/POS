@@ -1,5 +1,7 @@
 package com.example.posapp.viewModel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,55 +9,24 @@ import androidx.lifecycle.viewModelScope
 import com.example.posapp.dao.MenuDao
 import com.example.posapp.dao.OrderDao
 import com.example.posapp.dao.OrderFoodItemDao
-import com.example.posapp.data.MenuData
 import com.example.posapp.data.OrderFoodItem
 import com.example.posapp.data.OrdersData
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class OrderViewModel(
     private val orderDao: OrderDao,
-    private val menuDao: MenuDao,
     private val orderFoodItemDao: OrderFoodItemDao
     ): ViewModel() {
 
-    fun getSelectedMenuWithQuantity(): LiveData<List<MenuData>> {
-      return menuDao.getSelectedMenuWithQuantity()
-    }
+    val totalRevenueToday = orderDao.getTotalPriceToday()
+    val totalRevenueThisWeek = orderDao.getTotalPriceWeek()
+    val totalRevenueThisMonth = orderDao.getTotalPriceMonth()
 
     fun getAllOrders(): LiveData<List<OrdersData>> {
         return orderDao.getAllOrders()
-    }
-
-    fun getItemByIdMenu(id: Int): LiveData<MenuData> {
-        return menuDao.getItem(id)
-    }
-
-    fun getAllOrderFoodItem(): LiveData<List<OrderFoodItem>> {
-        return orderFoodItemDao.getAllOrderFoodItem()
-    }
-
-    fun getOrderByTime(timeInMillis: Long): OrdersData? {
-        return orderDao.getOrderByTime(timeInMillis)
-    }
-
-    fun getTotalPriceByOrderId(): LiveData<List<OrderFoodItem>> {
-        return orderFoodItemDao.getAllOrderFoodItem()
-    }
-
-    fun searchOrderStatus(onSuccess: () -> Unit, onError: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val orders = orderDao.searchOrdersByStatus()
-            withContext(Dispatchers.Main) {
-                if (orders.isNotEmpty()) {
-                    onSuccess()
-                } else {
-                    onError()
-                }
-            }
-        }
     }
 
      fun insertOrder(ordersData: OrdersData) {
@@ -82,30 +53,41 @@ class OrderViewModel(
         }
     }
 
-    fun deleteOrder(orderId: Int, id: Int) {
-        viewModelScope.launch {
-            orderDao.deleteById(id)
-            orderFoodItemDao.deleteByOrderId(orderId)
-        }
-    }
 
-    private fun updateOrderFoodItem(ordersData: OrdersData, orderFoodItem: OrderFoodItem) {
-        viewModelScope.launch {
-            orderDao.update(ordersData)
-            orderFoodItemDao.update(orderFoodItem)
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun getTotalPriceToday(): LiveData<Int> {
+//        val today = LocalDate.now()
+//        val todayString = DateTimeFormatter.ISO_LOCAL_DATE.format(today)
+//        return orderDao.getTotalPriceToday(todayString)
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun getTotalPriceWeek(): LiveData<Int> {
+//        val endDate = LocalDate.now()
+//        val startDate = endDate.minusDays(6)
+//        val startDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(startDate)
+//        val endDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(endDate)
+//        return orderDao.getTotalPriceWeek(startDateString,endDateString )
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    fun getTotalPriceMonth(): LiveData<Int> {
+//        val endDate = LocalDate.now()
+//        val startDate = endDate.minusMonths(1)
+//        val startDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(startDate)
+//        val endDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(endDate)
+//        return orderDao.getTotalPriceMonth(startDateString,endDateString )
+//    }
 }
 
 class OrderViewModelFactory(
     private val orderDao: OrderDao,
-    private val menuDao: MenuDao,
     private val orderFoodItemDao: OrderFoodItemDao,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(OrderViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return OrderViewModel(orderDao, menuDao, orderFoodItemDao) as T
+            return OrderViewModel(orderDao, orderFoodItemDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

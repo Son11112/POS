@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapp.data.ShiftsAdapter
+import com.example.posapp.adapter.ShiftsAdapter
 import com.example.posapp.viewModel.ShiftsViewModel
 import com.example.posapp.viewModel.ShiftsViewModelFactory
 import com.example.posapp.data.MyRoomDatabase
@@ -39,8 +39,8 @@ class FragmentShifts : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Khởi tạo ViewModel
 
+        // Khởi tạo ViewModel
         val factory = ShiftsViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).shiftsDao()
         )
@@ -53,7 +53,7 @@ class FragmentShifts : Fragment() {
         // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
         shiftsViewModel.getAllShifts().observe(viewLifecycleOwner) { shifts ->
             Log.d(TAG,"Shifts $shifts")
-            var adapter = ShiftsAdapter(requireContext(), shifts)
+            var adapter = ShiftsAdapter(requireContext(), shifts, shiftsViewModel)
             recyclerView.adapter = adapter
         }
     }

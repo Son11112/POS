@@ -2,12 +2,15 @@ package com.example.posapp
 
 import android.content.ContentValues
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -16,6 +19,9 @@ import com.example.myapp.data.ShiftsHomeAdapter
 import com.example.posapp.viewModel.ShiftsViewModel
 import com.example.posapp.viewModel.ShiftsViewModelFactory
 import com.example.posapp.data.MyRoomDatabase
+import com.example.posapp.databinding.FragmentHomeBinding
+import com.example.posapp.viewModel.OrderViewModel
+import com.example.posapp.viewModel.OrderViewModelFactory
 import org.json.JSONObject
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -23,40 +29,74 @@ import java.util.*
 
 class FragmentHome : Fragment() {
 
+    private lateinit var orderViewModel: OrderViewModel
     private lateinit var shiftsViewModel: ShiftsViewModel
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     val CITY: String = "TOKYO"
     val API: String = "95cc384a7b07fecdae34df05a1c43365"
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val buttonLogOut = view.findViewById<Button>(R.id.btnLogOut)
-        buttonLogOut.setOnClickListener {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+         val dayView: TextView = binding.tvDay
+         val weekView: TextView = binding.tvWeek
+         val monthView: TextView = binding.tvMonth
+
+        // Khởi tạo ViewModel
+        val factory = ShiftsViewModelFactory(MyRoomDatabase.getDatabase(requireContext()).shiftsDao())
+        val orderFactory = OrderViewModelFactory(
+            MyRoomDatabase.getDatabase(requireContext()).orderDao(),
+            MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
+        )
+        shiftsViewModel = ViewModelProvider(this, factory).get(ShiftsViewModel::class.java)
+        orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
+
+        // Khởi tạo adapter
+        val recyclerView = view.findViewById<RecyclerView>(R.id.Shiftsrecycleview)
+
+        // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
+        shiftsViewModel.getAllShifts().observe(viewLifecycleOwner) { shifts ->
+            Log.d(ContentValues.TAG, "Shifts $shifts")
+            val adapter = ShiftsHomeAdapter(requireContext(), shifts)
+            recyclerView.adapter = adapter
+        }
+
+        orderViewModel.totalRevenueToday.observe(viewLifecycleOwner) { revenue ->
+            dayView.text = "$revenue"+"円"
+        }
+
+        orderViewModel.totalRevenueThisWeek.observe(viewLifecycleOwner) { revenue ->
+            weekView.text = "$revenue"+"円"
+        }
+
+        orderViewModel.totalRevenueThisMonth.observe(viewLifecycleOwner){ revenue ->
+            monthView.text = "$revenue"+"円"
+        }
+
+        binding.btnLogOut.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentHome_to_fragmentLogin)
         }
-        val buttonEmployeeManagement = view.findViewById<Button>(R.id.btnEmployeeManagement)
-        buttonEmployeeManagement.setOnClickListener {
+        binding.btnEmployeeManagement.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentHome_to_fragmentUsers)
         }
-        val buttonMenuManagement = view.findViewById<Button>(R.id.btnMenuManagement)
-        buttonMenuManagement.setOnClickListener {
+        binding.btnMenuManagement.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentHome_to_fragmentMenu)
         }
-        val buttonNotificationManagement = view.findViewById<Button>(R.id.btnNotificationManagement)
-        buttonNotificationManagement.setOnClickListener {
+        binding.btnNotificationManagement.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentHome_to_fragmentNotifications)
         }
-        val buttonShiftConfirmation = view.findViewById<Button>(R.id.btnShiftConfirmation)
-        buttonShiftConfirmation.setOnClickListener {
+        binding.btnShiftConfirmation.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentHome_to_fragmentShifts)
-        }
-        val buttonSalesAnalysis = view.findViewById<Button>(R.id.btnSalesAnalysis)
-        buttonSalesAnalysis.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentHome_to_fragmentSalesAnalysis)
         }
 
         val textViewDate = view.findViewById<TextView>(R.id.tvDate)
@@ -68,28 +108,7 @@ class FragmentHome : Fragment() {
                 )
             }日"
         textViewDate.text = currentDate
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         weatherTask().execute()
-
-        // Khởi tạo ViewModel
-        val factory = ShiftsViewModelFactory(
-            MyRoomDatabase.getDatabase(requireContext()).shiftsDao()
-        )
-        shiftsViewModel = ViewModelProvider(this, factory).get(ShiftsViewModel::class.java)
-
-        // Khởi tạo adapter
-        val recyclerView = view.findViewById<RecyclerView>(R.id.Shiftsrecycleview)
-
-        // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
-        shiftsViewModel.getAllShifts().observe(viewLifecycleOwner) { shifts ->
-            Log.d(ContentValues.TAG, "Shifts $shifts")
-            val adapter = ShiftsHomeAdapter(requireContext(), shifts)
-            recyclerView.adapter = adapter
-        }
     }
 
     inner class weatherTask() : AsyncTask<String, Void, String>() {
