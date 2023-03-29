@@ -20,6 +20,18 @@
         app:layout_constraintVertical_bias="0.954" />
 
     <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="216dp"
+        android:layout_height="71dp"
+        android:layout_marginEnd="16dp"
+        android:text="検索"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.134" />
+
+    <Button
         android:id="@+id/btnExitToHome"
         android:layout_width="216dp"
         android:layout_height="71dp"
@@ -32,22 +44,22 @@
         app:layout_constraintVertical_bias="0.955" />
 
     <DatePicker
-        android:id="@+id/datePicker2"
-        android:layout_width="717dp"
-        android:layout_height="319dp"
-        android:layout_marginTop="48dp"
+        android:id="@+id/datePicker"
+        android:layout_width="581dp"
+        android:layout_height="262dp"
+        android:layout_marginTop="16dp"
         android:datePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/NotificationRecycleView"
-        android:layout_width="986dp"
-        android:layout_height="281dp"
+        android:id="@+id/notificationRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/datePicker2"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        app:layout_constraintTop_toBottomOf="@+id/datePicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

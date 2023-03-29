@@ -53,7 +53,7 @@ class FragmentShifts : Fragment() {
         // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
         shiftsViewModel.getAllShifts().observe(viewLifecycleOwner) { shifts ->
             Log.d(TAG,"Shifts $shifts")
-            var adapter = ShiftsAdapter(requireContext(), shifts, shiftsViewModel)
+            var adapter = ShiftsAdapter(requireContext(), shifts, shiftsViewModel, this)
             recyclerView.adapter = adapter
         }
     }

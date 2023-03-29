@@ -34,9 +34,16 @@ interface UserDao {
     @Query("SELECT * FROM user_table WHERE password = :password")
     suspend fun getUserByEmployeePass(password: String): UserData
 
+    @Query("SELECT COUNT(*) FROM user_table WHERE employee_code = :employeeCode")
+    fun checkEmployeeCodeExist(employeeCode: String): Int
+
     @Query("SELECT * FROM user_table ORDER BY name ASC")
     fun getAllUser(): LiveData<List<UserData>>
 
     @Query("DELETE FROM user_table WHERE id=:id")
     suspend fun deleteEmployee(id: Int)
+
+    @Query("SELECT * FROM user_table WHERE role = 'staff'")
+    fun getStaffList(): LiveData<List<UserData>>
+
 }

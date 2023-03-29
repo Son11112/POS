@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.posapp.FragmentMenu
 import com.example.posapp.data.MenuData
 import com.example.posapp.databinding.RecycleviewMenuBinding
 import com.example.posapp.viewModel.MenuViewModel
@@ -18,7 +20,8 @@ import kotlinx.coroutines.launch
 class MenuAdapter(
     private val context: Context,
     var dataset: List<MenuData>,
-    private var menuViewModel: MenuViewModel
+    private var menuViewModel: MenuViewModel,
+    private var fragmentMenu: FragmentMenu
 ) : RecyclerView.Adapter<MenuAdapter.MenuDataViewHolder>() {
 
     inner class MenuDataViewHolder(val binding: RecycleviewMenuBinding) :
@@ -46,6 +49,10 @@ class MenuAdapter(
                 val newPrice = binding.tvPriceMenu.text.toString().toInt()
                 val newQuantity = binding.tvQuantity.text.toString().toInt()
                 val newName = binding.tvNameMenu.text.toString()
+                AlertDialog.Builder(fragmentMenu.requireContext())
+                    .setTitle("確認")
+                    .setMessage("更新しますか？")
+                    .setPositiveButton("はい") { dialog, _ ->
                 CoroutineScope(Dispatchers.Main).launch {
                     menuViewModel.updateMenu(
                         dataset[position].id,
@@ -58,14 +65,17 @@ class MenuAdapter(
                         menuData.tempQuantityInCart
                     )
                 }
-                Toast.makeText(context, "メニュー更新しました！", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(fragmentMenu.context, "更新しました！", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("いいえ") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
 
             binding.btnDelete.setOnClickListener {
-                CoroutineScope(Dispatchers.Main).launch {
-                    menuViewModel.deleteMenu(dataset[position].id)
-                }
-                Toast.makeText(context, "商品削除しました！", Toast.LENGTH_SHORT).show()
+                showDeleteConfirmationDialog(dataset[position].id)
             }
         }
     }
@@ -85,6 +95,25 @@ class MenuAdapter(
     }
 
     fun getItem(position: Int) = dataset[position]
+
+    private fun showDeleteConfirmationDialog(Id: Int) {
+        AlertDialog.Builder(fragmentMenu.requireContext())
+            .setTitle("確認")
+            .setMessage("本当に削除しますか？")
+            .setPositiveButton("はい") { dialog, _ ->
+                // Xác nhận xóa dữ liệu
+                CoroutineScope(Dispatchers.Main).launch {
+                    menuViewModel.deleteMenu(Id)
+                }
+                Toast.makeText(fragmentMenu.context, "削除しました！", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+            .setNegativeButton("いいえ") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
 }
 
 

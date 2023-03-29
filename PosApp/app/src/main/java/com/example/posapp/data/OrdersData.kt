@@ -17,5 +17,7 @@ data class OrdersData(
     @ColumnInfo(name = "order_date")
     val orderDate: String,
     @ColumnInfo(name = "order_time")
-    val orderTime: String
+    val orderTime: String,
+//    @ColumnInfo(name = "table_number")
+//    val tableNumber: Int
 )

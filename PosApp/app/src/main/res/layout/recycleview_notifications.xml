@@ -5,47 +5,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="#C3EADB"
-    android:layout_height="230dp">
-
-    <TextView
-        android:id="@+id/tvSubject"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="subject"
-        android:textSize="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvDate"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="date"
+        android:layout_width="892dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="204dp"
+        android:text="Date"
         android:textSize="40dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvSubject"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSubject" />
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvDetailed"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="detailed"
+        android:id="@+id/textView35"
+        android:layout_width="187dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="名前："
+        android:textColor="@color/black"
         android:textSize="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/tvSubject"
+        android:layout_width="892dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="204dp"
+        android:text="Subject"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvDate"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvDate"
         app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
-    <ImageView
-        android:id="@+id/deleteUserID"
-        android:layout_width="64dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="76dp"
+    <TextView
+        android:id="@+id/textView38"
+        android:layout_width="187dp"
+        android:layout_height="75dp"
+        android:gravity="center"
+        android:text="件名："
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/tvSubject"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView35" />
+
+    <EditText
+        android:id="@+id/tvDetailed"
+        android:layout_width="892dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="204dp"
+        android:text="detailed"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvSubject"
+        app:layout_constraintTop_toBottomOf="@+id/tvSubject" />
+
+    <TextView
+        android:layout_width="187dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:text="内容："
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView38" />
+
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="74dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="16dp"
-        android:onClick="onDeleteButtonClicked"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/delete" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
+
+    <ImageButton
+        android:id="@+id/btnUpdate"
+        android:layout_width="74dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.374"
+        app:srcCompat="@android:drawable/ic_popup_sync" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/white"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

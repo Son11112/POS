@@ -1,9 +1,6 @@
 package com.example.posapp.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.posapp.dao.UserDao
 import com.example.posapp.data.UserData
 import kotlinx.coroutines.Dispatchers
@@ -20,13 +17,15 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
     fun addNewItem(
         role: String, employeeName: String, employeeCode: String,
-        password: String
+        password: String,birth: String,phone: String,
     ) {
         val newItem = UserData(
             role = role,
             employeeName = employeeName,
             employeeCode = employeeCode,
-            password = password
+            password = password,
+            birth = birth,
+            phone = phone
         )
         insertItem(newItem)
     }
@@ -43,6 +42,42 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
         }
     }
 
+
+    fun checkEmployeeCodeExist(employeeCode: String): LiveData<Boolean> {
+        val resultLiveData = MutableLiveData<Boolean>()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val count = userDao.checkEmployeeCodeExist(employeeCode)
+            resultLiveData.postValue(count > 0)
+        }
+        return resultLiveData
+    }
+
+    fun getStaffList(): LiveData<List<UserData>> {
+        return userDao.getStaffList()
+    }
+
+    suspend fun update(
+        id: Int,
+        role: String,
+        employeeName: String,
+        employeeCode: String,
+        password: String,
+        birth: String,phone: String,
+    ) {
+        withContext(Dispatchers.IO) {
+            val userData = UserData(
+                id = id,
+                role = role,
+                employeeName = employeeName,
+                employeeCode = employeeCode,
+                password = password,
+                birth = birth,
+                phone = phone
+            )
+            userDao.update(userData)
+        }
+    }
 }
 
 

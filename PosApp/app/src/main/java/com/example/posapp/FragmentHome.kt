@@ -1,20 +1,16 @@
 package com.example.posapp
 
-import android.content.ContentValues
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.myapp.data.ShiftsHomeAdapter
 import com.example.posapp.viewModel.ShiftsViewModel
 import com.example.posapp.viewModel.ShiftsViewModelFactory
@@ -48,12 +44,19 @@ class FragmentHome : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-         val dayView: TextView = binding.tvDay
-         val weekView: TextView = binding.tvWeek
-         val monthView: TextView = binding.tvMonth
+        val dayView: TextView = binding.tvDay
+        val weekView: TextView = binding.tvWeek
+        val monthView: TextView = binding.tvMonth
+        val calendars = Calendar.getInstance()
+        val currentDateShift = String.format("%d-%d-%d", calendars.get(Calendar.YEAR), calendars.get(Calendar.MONTH) + 1, calendars.get(Calendar.DAY_OF_MONTH))
+        val currentDateSold = Calendar.getInstance()
+        val endPeriod = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(currentDateSold.time)
+        currentDateSold.add(Calendar.DATE, -7) // Trừ đi 7 ngày
+        val startPeriod = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(currentDateSold.time)
 
         // Khởi tạo ViewModel
-        val factory = ShiftsViewModelFactory(MyRoomDatabase.getDatabase(requireContext()).shiftsDao())
+        val factory =
+            ShiftsViewModelFactory(MyRoomDatabase.getDatabase(requireContext()).shiftsDao())
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
@@ -62,14 +65,25 @@ class FragmentHome : Fragment() {
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
 
         // Khởi tạo adapter
-        val recyclerView = view.findViewById<RecyclerView>(R.id.Shiftsrecycleview)
+        val recyclerView = binding.shiftsRecycleView
+        val adapter = ShiftsHomeAdapter(mutableListOf())
+        recyclerView.adapter = adapter
 
-        // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
-        shiftsViewModel.getAllShifts().observe(viewLifecycleOwner) { shifts ->
-            Log.d(ContentValues.TAG, "Shifts $shifts")
-            val adapter = ShiftsHomeAdapter(requireContext(), shifts)
-            recyclerView.adapter = adapter
+        shiftsViewModel.getShiftByDate(currentDateShift).observe(viewLifecycleOwner) { shifts ->
+            if (shifts.isNotEmpty()) {
+                (recyclerView.adapter as ShiftsHomeAdapter).updateData(shifts)
+            }
         }
+
+        val resultText = StringBuilder()
+        orderViewModel.getTopSellingItemsInPeriod(startPeriod, endPeriod, 1)
+            .observe(viewLifecycleOwner) { topSellingItems ->
+                // Cập nhật giao diện người dùng với danh sách topSellingItems
+                topSellingItems.forEach { item ->
+                    resultText.append("${item.productName}: ${item.totalQuantitySold}\n個")
+                }
+                binding.sold.text = resultText.toString()
+            }
 
         orderViewModel.totalRevenueToday.observe(viewLifecycleOwner) { revenue ->
             dayView.text = "$revenue"+"円"
@@ -101,12 +115,7 @@ class FragmentHome : Fragment() {
 
         val textViewDate = view.findViewById<TextView>(R.id.tvDate)
         val calendar = Calendar.getInstance()
-        val currentDate =
-            "${calendar.get(Calendar.YEAR)}年${calendar.get(Calendar.MONTH) + 1}月${
-                calendar.get(
-                    Calendar.DATE
-                )
-            }日"
+        val currentDate = "${calendar.get(Calendar.YEAR)}年${calendar.get(Calendar.MONTH) + 1}月${calendar.get(Calendar.DATE)}日"
         textViewDate.text = currentDate
         weatherTask().execute()
     }
@@ -115,6 +124,7 @@ class FragmentHome : Fragment() {
         override fun onPreExecute() {
             super.onPreExecute()
 
+            view?.findViewById<RelativeLayout>(R.id.mainContainer)?.visibility = View.VISIBLE
             view?.findViewById<ProgressBar>(R.id.loader)?.visibility = View.VISIBLE
             view?.findViewById<RelativeLayout>(R.id.mainContainer)?.visibility = View.GONE
             view?.findViewById<TextView>(R.id.errorText)?.visibility = View.GONE
@@ -158,12 +168,12 @@ class FragmentHome : Fragment() {
                 val address = jsonObj.getString("name") + ", " + sys.getString("country")
 
                 view?.findViewById<TextView>(R.id.address)?.text = address
-                view?.findViewById<TextView>(R.id.updated_at)?.text = updatedAtText
+                view?.findViewById<TextView>(R.id.updatedAt)?.text = updatedAtText
                 view?.findViewById<TextView>(R.id.status)?.text =
                     weatherDescription.capitalize(Locale.JAPANESE)
                 view?.findViewById<TextView>(R.id.temp)?.text = temp
-                view?.findViewById<TextView>(R.id.temp_min)?.text = tempMin
-                view?.findViewById<TextView>(R.id.temp_max)?.text = tempMax
+                view?.findViewById<TextView>(R.id.tempMin)?.text = tempMin
+                view?.findViewById<TextView>(R.id.tempMax)?.text = tempMax
                 view?.findViewById<TextView>(R.id.sunrise)?.text =
                     SimpleDateFormat("hh:mm a", Locale.JAPANESE).format(Date(sunrise * 1000))
                 view?.findViewById<TextView>(R.id.sunset)?.text =

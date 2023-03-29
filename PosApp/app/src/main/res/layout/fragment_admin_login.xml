@@ -22,6 +22,8 @@
         android:ems="30"
         android:gravity="center"
         android:layout_gravity="center"
+        android:inputType="textPassword|number"
+        android:password="true"
         android:textSize="30dp"
         android:hint="社員コードのパスワードをここに入れてください" />
 
@@ -46,5 +48,11 @@
         android:layout_gravity="center"
         android:layout_marginTop="160dp"
         android:text="戻る" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button" />
 
 </FrameLayout>

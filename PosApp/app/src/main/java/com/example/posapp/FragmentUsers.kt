@@ -50,7 +50,7 @@ class FragmentUsers : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.UsersRecycleview)
         userViewModel.getAllUser().observe(viewLifecycleOwner) { users ->
             Log.d(TAG,"Users $users")
-            var adapter = UsersAdapter(requireContext(),users, userViewModel)
+            var adapter = UsersAdapter(requireContext(),users, userViewModel, this)
             recyclerView.adapter = adapter
         }
     }

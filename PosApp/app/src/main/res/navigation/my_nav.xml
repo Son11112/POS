@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_fragmentLogin_to_fragmentAdminLogin"
-            app:destination="@id/fragmentAdminLogin" />
+            app:destination="@id/fragmentAdminLogin">
+            <argument
+                android:name="employeeCode"
+                app:argType="string" />
+        </action>
         <action
             android:id="@+id/action_fragmentLogin_to_fragmentOrders"
             app:destination="@id/fragmentOrders" />

@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.*
+import com.example.posapp.data.NotificationData
 import com.example.posapp.data.ShiftsData
 
 @Dao
@@ -21,6 +22,9 @@ interface ShiftsDao {
 
     @Query("DELETE FROM shifts_table WHERE id=:id")
     suspend fun deleteShift(id: Int)
+
+    @Query("SELECT * FROM shifts_table WHERE date = :selectedDate ORDER BY date ASC LIMIT 4")
+    fun getShiftsByDate(selectedDate: String): LiveData<List<ShiftsData>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(shiftsData: ShiftsData)

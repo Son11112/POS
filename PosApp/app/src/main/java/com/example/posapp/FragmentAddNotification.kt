@@ -9,9 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.posapp.data.MyRoomDatabase
 import com.example.posapp.viewModel.NotificationViewModel
 import com.example.posapp.databinding.FragmentAddNotificationBinding
+import com.example.posapp.viewModel.NotificationViewModelFactory
+import com.example.posapp.viewModel.UserViewModel
+import com.example.posapp.viewModel.UserViewModelFactory
 
 class FragmentAddNotification : Fragment() {
 
@@ -30,8 +35,13 @@ class FragmentAddNotification : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // khởi tạo viewmodel
+        val factory = NotificationViewModelFactory(
+            MyRoomDatabase.getDatabase(requireContext()).notificationDao()
+        )
+        notificationViewModel = ViewModelProvider(this,factory).get(NotificationViewModel::class.java)
+
         binding.btnAddNotification.setOnClickListener {
-            Toast.makeText(getActivity(), "追加しました。", Toast.LENGTH_LONG).show()
             addNewItem()
         }
         binding.btnExitToNotification.setOnClickListener {
@@ -42,10 +52,13 @@ class FragmentAddNotification : Fragment() {
     @SuppressLint("SuspiciousIndentation")
     private fun addNewItem() {
         notificationViewModel.addNewItem(
-            "${binding.datePicker3.year}-${binding.datePicker3.month}-${binding.datePicker3.dayOfMonth}",
+            "${binding.datePicker3.year}-${binding.datePicker3.month+1}-${binding.datePicker3.dayOfMonth}",
             binding.edtSubject.text.toString(),
             binding.edtDetailed.text.toString()
         )
+        binding.edtSubject.setText("")
+        binding.edtDetailed.setText("")
+        Toast.makeText(getActivity(), "追加しました。", Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

@@ -43,20 +43,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+
     <DatePicker
         android:id="@+id/datePicker"
         android:layout_width="892dp"
         android:layout_height="332dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="84dp"
         android:datePickerMode="spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-
-    <EditText
-        android:id="@+id/edtName"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+    <Spinner
+        android:id="@+id/spnName"
+        android:layout_width="499dp"
+        android:layout_height="104dp"
         android:layout_marginTop="520dp"
         android:ems="30"
         android:hint="従業員の名前を入れてください"
@@ -78,14 +78,13 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="99dp"
+        android:layout_height="104dp"
         android:gravity="center"
         android:text="名前："
         android:textSize="25dp"
-        app:layout_constraintEnd_toStartOf="@+id/edtName"
-        app:layout_constraintTop_toTopOf="@+id/edtName" />
+        app:layout_constraintEnd_toStartOf="@+id/spnName"
+        app:layout_constraintTop_toTopOf="@+id/spnName" />
 
     <CheckBox
         android:id="@+id/cbxMorning"

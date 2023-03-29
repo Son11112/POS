@@ -72,12 +72,6 @@ class FragmentOrders : Fragment() {
             orderAdapter.setData(menu)
         }
 
-//        binding.btnAdd.setOnClickListener {
-//            viewLifecycleOwner.lifecycleScope.launch {
-//                updateCartItems()
-//            }
-//        }
-
         binding.btnOrder.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 updateCartItems()

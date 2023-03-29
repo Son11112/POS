@@ -11,6 +11,7 @@ import com.example.posapp.dao.OrderDao
 import com.example.posapp.dao.OrderFoodItemDao
 import com.example.posapp.data.OrderFoodItem
 import com.example.posapp.data.OrdersData
+import com.example.posapp.data.TopSellingItem
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -53,31 +54,9 @@ class OrderViewModel(
         }
     }
 
-
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun getTotalPriceToday(): LiveData<Int> {
-//        val today = LocalDate.now()
-//        val todayString = DateTimeFormatter.ISO_LOCAL_DATE.format(today)
-//        return orderDao.getTotalPriceToday(todayString)
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun getTotalPriceWeek(): LiveData<Int> {
-//        val endDate = LocalDate.now()
-//        val startDate = endDate.minusDays(6)
-//        val startDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(startDate)
-//        val endDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(endDate)
-//        return orderDao.getTotalPriceWeek(startDateString,endDateString )
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun getTotalPriceMonth(): LiveData<Int> {
-//        val endDate = LocalDate.now()
-//        val startDate = endDate.minusMonths(1)
-//        val startDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(startDate)
-//        val endDateString = DateTimeFormatter.ISO_LOCAL_DATE.format(endDate)
-//        return orderDao.getTotalPriceMonth(startDateString,endDateString )
-//    }
+    fun getTopSellingItemsInPeriod(startPeriod: String, endPeriod: String, numOfItems: Int): LiveData<List<TopSellingItem>> {
+        return orderFoodItemDao.getTopSellingItemsInPeriod(startPeriod, endPeriod, numOfItems)
+    }
 }
 
 class OrderViewModelFactory(

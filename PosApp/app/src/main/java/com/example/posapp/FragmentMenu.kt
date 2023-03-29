@@ -47,12 +47,12 @@ class FragmentMenu : Fragment() {
         menuViewModel = ViewModelProvider(this, factory).get(MenuViewModel::class.java)
 
         // Khởi tạo adapter
-        menuAdapter = MenuAdapter(requireContext(), mutableListOf(), menuViewModel)
+        menuAdapter = MenuAdapter(requireContext(), mutableListOf(), menuViewModel, this)
         val recyclerView = view.findViewById<RecyclerView>(R.id.MenuRecyclerview)
 
         // Lấy dữ liệu từ ViewModel và cập nhật lên RecyclerView
         menuViewModel.getAllMenu().observe(viewLifecycleOwner) { menu ->
-            menuAdapter = MenuAdapter(requireContext(), menu, menuViewModel)
+            menuAdapter = MenuAdapter(requireContext(), menu, menuViewModel, this)
             recyclerView.adapter = menuAdapter
         }
         binding.btnExt.setOnClickListener {

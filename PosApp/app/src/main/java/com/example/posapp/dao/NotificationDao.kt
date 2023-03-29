@@ -19,15 +19,22 @@ interface NotificationDao {
     @Query("SELECT * from Notification_Table WHERE id = :id")
     fun getItem(id: Int): LiveData<NotificationData>
 
+    @Query("SELECT * from Notification_Table ORDER BY date ASC")
+    fun getNotification(): LiveData<List<NotificationData>>
+
+    @Query("SELECT * FROM notification_table WHERE date = :selectedDate")
+    suspend fun getNotificationsByDate(selectedDate: String): List<NotificationData>
+
+    @Query("SELECT * FROM notification_table ORDER BY date DESC LIMIT 4")
+    suspend fun getLatestNotification(): NotificationData?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(notificationData: NotificationData)
+
+    @Query("DELETE FROM notification_table WHERE id=:id")
+    suspend fun delete(id: Int)
 
     @Update
     suspend fun update(notificationData: NotificationData)
 
-    @Delete
-    suspend fun delete(notificationData: NotificationData)
-
-    @Query("SELECT * from Notification_Table ORDER BY date ASC")
-    fun getNotification(): LiveData<List<NotificationData>>
 }

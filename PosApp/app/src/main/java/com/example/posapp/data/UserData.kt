@@ -14,4 +14,8 @@ data class UserData(
     val employeeCode: String,
     @ColumnInfo(name = "password")
     val password: String,
+    @ColumnInfo(name = "date_of_birth")
+    val birth: String,
+    @ColumnInfo(name = "phone_number")
+    val phone: String,
 )

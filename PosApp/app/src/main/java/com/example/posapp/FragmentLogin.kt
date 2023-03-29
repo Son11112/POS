@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -21,7 +22,6 @@ class FragmentLogin : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +40,9 @@ class FragmentLogin : Fragment() {
                 try {
                     val isAdmin = runBlocking { getRoleByEmployeeCode(employeeCode) }
                     if (isAdmin) {
-                        findNavController().navigate(R.id.action_fragmentLogin_to_fragmentAdminLogin)
+                        val action = R.id.action_fragmentLogin_to_fragmentAdminLogin
+                        val bundle = bundleOf("employeeCode" to employeeCode)
+                        findNavController().navigate(action, bundle)
                     } else {
                         findNavController().navigate(R.id.action_fragmentLogin_to_fragmentOrders)
                     }
@@ -50,6 +52,13 @@ class FragmentLogin : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "社員コードを入力してください", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.btnAd.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentAdminLogin)
+        }
+        binding.btnStaff.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentOrders)
         }
     }
 
@@ -64,26 +73,3 @@ class FragmentLogin : Fragment() {
         _binding = null
     }
 }
-
-
-
-
-//class FragmentLogin : Fragment() {
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        val view = inflater.inflate(R.layout.fragment_login, container, false)
-//        val button = view.findViewById<Button>(R.id.btnAd)
-//        button.setOnClickListener {
-//            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentAdminLogin)
-//        }
-//        val buttonStaff = view.findViewById<Button>(R.id.btnStaff)
-//        buttonStaff.setOnClickListener {
-//            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentOrders)
-//        }
-//        return view
-//    }
-//
-//}

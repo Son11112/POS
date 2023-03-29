@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.example.posapp.FragmentShifts
 import com.example.posapp.R
 import com.example.posapp.data.ShiftsData
 import com.example.posapp.databinding.FragmentAddNotificationBinding
@@ -20,23 +22,45 @@ import kotlinx.coroutines.launch
 class ShiftsAdapter(
     private val context: Context,
     private var dataset: List<ShiftsData>,
-    private var shiftsViewModel: ShiftsViewModel
+    private var shiftsViewModel: ShiftsViewModel,
+    private var fragmentShifts: FragmentShifts
 ) : RecyclerView.Adapter<ShiftsAdapter.ShiftsDataViewHolder>() {
 
     inner class ShiftsDataViewHolder(val binding: RecycleviewShiftsBinding) : RecyclerView.ViewHolder(binding.root) {
         private val employeeNameTextView: TextView = binding.tvName
-        private val dateShiftsTextView: TextView = binding.tvTime
-        private val timeShiftsTextView: TextView = binding.tvDate
+        private val dateShiftsTextView: TextView = binding.tvDate
+        private val timeShiftsTextView: TextView = binding.tvTime
 
-        fun bind(shiftsData: ShiftsData){
+        fun bind(shiftsData: ShiftsData) {
             employeeNameTextView.text = shiftsData.employeeName
             dateShiftsTextView.text = shiftsData.dateShifts
             timeShiftsTextView.text = shiftsData.timeShifts
             binding.btnDelete.setOnClickListener {
-                CoroutineScope(Dispatchers.Main).launch {
-                    shiftsViewModel.deleteShift(dataset[position].id)
-                }
-                Toast.makeText(context, "削除しました！", Toast.LENGTH_SHORT).show()
+                showDeleteConfirmationDialog(dataset[position].id)
+            }
+            binding.btnUpdate.setOnClickListener {
+                val newName = binding.tvName.text.toString()
+                val newDate = binding.tvDate.text.toString()
+                val newTime = binding.tvTime.text.toString()
+                AlertDialog.Builder(fragmentShifts.requireContext())
+                    .setTitle("確認")
+                    .setMessage("更新しますか？")
+                    .setPositiveButton("はい") { dialog, _ ->
+                        CoroutineScope(Dispatchers.Main).launch {
+                            shiftsViewModel.update(
+                                dataset[position].id,
+                                newName,
+                                newDate,
+                                newTime
+                            )
+                        }
+                        Toast.makeText(fragmentShifts.context, "更新しました！", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("いいえ") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
         }
     }
@@ -56,4 +80,22 @@ class ShiftsAdapter(
     }
 
     fun getItem(position: Int) = dataset[position]
+
+    private fun showDeleteConfirmationDialog(Id: Int) {
+        AlertDialog.Builder(fragmentShifts.requireContext())
+            .setTitle("確認")
+            .setMessage("本当に削除しますか？")
+            .setPositiveButton("はい") { dialog, _ ->
+                // Xác nhận xóa dữ liệu
+                CoroutineScope(Dispatchers.Main).launch {
+                    shiftsViewModel.delete(Id)
+                }
+                Toast.makeText(fragmentShifts.context, "削除しました！", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+            .setNegativeButton("いいえ") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
 }

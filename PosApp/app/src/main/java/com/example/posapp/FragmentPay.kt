@@ -179,6 +179,7 @@ class FragmentPay : Fragment() {
     @SuppressLint("SuspiciousIndentation")
     private fun addNewItem() {
 
+        try {
         val filteredMenuData = menuData.filter { it.tempQuantityInCart > 0 }
         if (filteredMenuData.isNotEmpty()) {
 
@@ -195,6 +196,7 @@ class FragmentPay : Fragment() {
                 orderDate = orderDate,
                 orderTime = orderTime
             )
+
             orderViewModel.insertOrder(ordersData)
 
             filteredMenuData.map { menu ->
@@ -228,5 +230,8 @@ class FragmentPay : Fragment() {
         } else {
             Toast.makeText(context, "カートは空です", Toast.LENGTH_SHORT).show()
         }
+    }catch (e : Exception) {
+        Toast.makeText(context, "エラーありました", Toast.LENGTH_SHORT).show()
     }
+}
 }

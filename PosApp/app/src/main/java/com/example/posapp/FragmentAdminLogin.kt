@@ -4,21 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.posapp.PasswordUtils.PasswordUtils
 import com.example.posapp.data.MyRoomDatabase
+import com.example.posapp.data.UserData
 import com.example.posapp.databinding.FragmentAdminLoginBinding
-import com.example.posapp.viewModel.UserViewModel
 import kotlinx.coroutines.runBlocking
 
 class FragmentAdminLogin : Fragment() {
 
     private var _binding: FragmentAdminLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userViewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +29,19 @@ class FragmentAdminLogin : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val employeeCode = arguments?.getString("employeeCode") ?: ""
+
         binding.btnLastLogin.setOnClickListener {
             val password = binding.edtLastLoginCode.text.toString()
             if (password.isNotEmpty()) {
                 try {
-                    val isAdmin = runBlocking { getRoleByEmployeeCode(password) }
-                    if (isAdmin) {
-                        findNavController().navigate(R.id.action_fragmentAdminLogin_to_fragmentHome)
-                    } else {
-                        Toast.makeText(context, "パスワード正しくありません！", Toast.LENGTH_SHORT).show()
+                    runBlocking {
+                        val user = getUserByEmployeeCode(employeeCode)
+                        if (user != null && PasswordUtils.checkPassword(password, user.password)) {
+                            findNavController().navigate(R.id.action_fragmentAdminLogin_to_fragmentHome)
+                        } else {
+                            Toast.makeText(context, "パスワード正しくありません！", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), "社員コードが無効です", Toast.LENGTH_SHORT).show()
@@ -52,13 +54,17 @@ class FragmentAdminLogin : Fragment() {
         binding.btnExitLogin.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentAdminLogin_to_fragmentLogin)
         }
+
+        binding.button.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentAdminLogin_to_fragmentHome)
+        }
     }
 
-    private suspend fun getRoleByEmployeeCode(password: String): Boolean {
+    private suspend fun getUserByEmployeeCode(password: String): UserData? {
         val userDao = MyRoomDatabase.getDatabase(requireContext()).userDao()
-        val user = userDao.getUserByEmployeePass(password)
-        return user.role == "admin"
+        return userDao.getUserByEmployeeCode(password)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

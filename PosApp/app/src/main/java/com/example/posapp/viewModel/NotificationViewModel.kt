@@ -1,20 +1,37 @@
 package com.example.posapp.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.posapp.dao.NotificationDao
 import com.example.posapp.data.NotificationData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NotificationViewModel(private val notificationDao: NotificationDao) : ViewModel() {
 
-    private val allNotification: LiveData<List<NotificationData>> =
-        notificationDao.getNotification()
+    suspend fun delete(id: Int) {
+        withContext(Dispatchers.IO) {
+            notificationDao.delete(id)
+        }
+    }
 
-    fun getNotification(): LiveData<List<NotificationData>> {
-        return notificationDao.getNotification()
+    suspend fun update(
+        id: Int,
+        date: String,
+        subject: String,
+        detailed : String
+    ) {
+        withContext(Dispatchers.IO) {
+            val notificationData = NotificationData(
+                id = id,
+                date = date,
+                subject = subject,
+                detailed = detailed
+            )
+            notificationDao.update(notificationData)
+        }
     }
 
     fun addNewItem(date: String, subject: String, detailed: String) {
@@ -32,6 +49,15 @@ class NotificationViewModel(private val notificationDao: NotificationDao) : View
             notificationDao.insert(notificationData)
         }
     }
+
+    suspend fun getNotificationsByDate(selectedDate: String): List<NotificationData> {
+        return notificationDao.getNotificationsByDate(selectedDate)
+    }
+
+    suspend fun getLatestNotification(): NotificationData? {
+        return notificationDao.getLatestNotification()
+    }
+
 }
 
 class NotificationViewModelFactory(private val notificationDao: NotificationDao) :
