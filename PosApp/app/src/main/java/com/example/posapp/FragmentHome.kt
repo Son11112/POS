@@ -60,6 +60,7 @@ class FragmentHome : Fragment() {
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
+            MyRoomDatabase.getDatabase(requireContext()).menuDao()
         )
         shiftsViewModel = ViewModelProvider(this, factory).get(ShiftsViewModel::class.java)
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
@@ -76,14 +77,14 @@ class FragmentHome : Fragment() {
         }
 
         val resultText = StringBuilder()
-        orderViewModel.getTopSellingItemsInPeriod(startPeriod, endPeriod, 1)
-            .observe(viewLifecycleOwner) { topSellingItems ->
-                // Cập nhật giao diện người dùng với danh sách topSellingItems
-                topSellingItems.forEach { item ->
-                    resultText.append("${item.productName}: ${item.totalQuantitySold}\n個")
-                }
-                binding.sold.text = resultText.toString()
-            }
+//        orderViewModel.getTopSellingItemsInPeriod(startPeriod, endPeriod, 1)
+//            .observe(viewLifecycleOwner) { topSellingItems ->
+//                // Cập nhật giao diện người dùng với danh sách topSellingItems
+//                topSellingItems.forEach { item ->
+//                    resultText.append("${item.productName}: ${item.totalQuantitySold}\n個")
+//                }
+//                binding.sold.text = resultText.toString()
+//            }
 
         orderViewModel.totalRevenueToday.observe(viewLifecycleOwner) { revenue ->
             dayView.text = "$revenue"+"円"

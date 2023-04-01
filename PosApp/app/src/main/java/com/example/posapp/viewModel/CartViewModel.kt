@@ -26,7 +26,7 @@ class CartViewModel(
         }
     }
 
-    suspend fun updateTotalPrice(id: Int, totalPrice: Int) {
+    suspend fun updateTotalPrice(id: String, totalPrice: Int) {
         withContext(Dispatchers.IO) {
             orderDao.updateTotalPrice(id, totalPrice)
         }

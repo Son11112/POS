@@ -1,15 +1,11 @@
 package com.example.posapp
 
-import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import androidx.navigation.fragment.findNavController
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -18,12 +14,15 @@ import com.example.posapp.data.MenuData
 import com.example.posapp.viewModel.MenuViewModel
 import com.example.posapp.viewModel.MenuViewModelFactory
 import com.example.posapp.data.MyRoomDatabase
+import com.example.posapp.data.OrderFoodItem
+import com.example.posapp.data.OrdersData
 import com.example.posapp.databinding.FragmentOrdersBinding
 import com.example.posapp.viewModel.OrderViewModel
 import com.example.posapp.viewModel.OrderViewModelFactory
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.*
 
 class FragmentOrders : Fragment() {
@@ -34,6 +33,13 @@ class FragmentOrders : Fragment() {
     private var _binding: FragmentOrdersBinding? = null
     private val binding get() = _binding!!
     val menuData = mutableListOf<MenuData>()
+    private val calendar = Calendar.getInstance()
+    private val orderDates = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(calendar.time)
+    private val orderTimes = SimpleDateFormat("HHmmss", Locale.getDefault()).format(calendar.time)
+    private val orderDate =
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+    private val orderTime =
+        SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(calendar.time)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +64,7 @@ class FragmentOrders : Fragment() {
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
+            MyRoomDatabase.getDatabase(requireContext()).menuDao()
         )
         menuViewModel = ViewModelProvider(this, factory).get(MenuViewModel::class.java)
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
@@ -73,53 +80,83 @@ class FragmentOrders : Fragment() {
         }
 
         binding.btnOrder.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                updateCartItems()
-                findNavController().navigate(R.id.action_fragmentOrders_to_fragmentStatus)
-            }
+            findNavController().navigate(R.id.action_fragmentOrders_to_fragmentStatus)
         }
 
         binding.btnCart.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                updateCartItems()
-                findNavController().navigate(R.id.action_fragmentOrders_to_fragmentCart)
+            if (binding.edtTableNumBer.text.toString().isNotEmpty()) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val selectedItems = orderAdapter.getSelectedItems()
+                    if (selectedItems.isNotEmpty()) {
+                        val menuItems = selectedItems.map { it.first }
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    insertOrder(menuItems)
+                                    Toast.makeText(context, "新しい注文を追加しました", Toast.LENGTH_SHORT)
+                                        .show()
+                        }
+                    } else {
+                        Toast.makeText(context, "カートが空です", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } else {
+                Toast.makeText(context, "テーブル番号を入れてください", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.btnMainFood.setOnClickListener {
-                menuViewModel.getMainFoods().observe(viewLifecycleOwner) { menu ->
-                    orderAdapter.setData(menu)
-                }
+            menuViewModel.getMainFoods().observe(viewLifecycleOwner) { menu ->
+                orderAdapter.setData(menu)
             }
+        }
         binding.btnDessert.setOnClickListener {
-                menuViewModel.getDesserts().observe(viewLifecycleOwner) { menu ->
-                    orderAdapter.setData(menu)
-                }
+            menuViewModel.getDesserts().observe(viewLifecycleOwner) { menu ->
+                orderAdapter.setData(menu)
             }
+        }
         binding.btnDrink.setOnClickListener {
-                menuViewModel.getDrinks().observe(viewLifecycleOwner) { menu ->
-                    orderAdapter.setData(menu)
-                }
+            menuViewModel.getDrinks().observe(viewLifecycleOwner) { menu ->
+                orderAdapter.setData(menu)
             }
+        }
         binding.btnLogOut.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentOrders_to_fragmentLogin)
         }
+
+        binding.btnPay.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentOrders_to_fragmentPay)
+        }
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    suspend fun updateCartItems() {
 
-        val itemCount = orderAdapter.itemCount
-        val menuData = mutableListOf<MenuData>()
-        for (i in 0 until itemCount) {
-            val item = orderAdapter.getItem(i)
-            menuData.add(item)
+    private suspend fun insertOrder(selectedItems: List<MenuData>) {
+        val tableNumber = binding.edtTableNumBer.text.toString().toInt()
+        val selectedItemsWithQuantity = orderAdapter.getSelectedItems()
+        var totalPrice = 0
+        for (menuItem in selectedItems) {
+            val quantity = orderAdapter.getQuantityAt(menuItem.id)
+            totalPrice += quantity * menuItem.productPrice
         }
-            for (item in menuData) {
-                // Cập nhật số lượng tempQuantityInCart vào cơ sở dữ liệu
-                menuViewModel.updateTempQuantityInCart(item.id, item.tempQuantityInCart)
-            }
+        val orderData =OrdersData(
+            orderId = orderDates + orderTimes,
+            orderStatus = "on_order",
+            totalPrice = totalPrice,
+            orderDate = orderDate,
+            orderTime = orderTime,
+            tableNumber = tableNumber,
+            payMethod = "unpaid"
+        )
+        orderViewModel.insertOrder(orderData)
+        for ((menuItem, quantityInCart) in selectedItemsWithQuantity) {
+            val orderFoodItem = OrderFoodItem(
+                orderId = orderDates + orderTimes,
+                foodItemId = menuItem.id,
+                quantityInCart = quantityInCart
+            )
+            orderViewModel.insertOrderItem(orderFoodItem)
+            menuViewModel.updateQuantityInStock(menuItem.id, menuItem.productQuantity-quantityInCart)
         }
+    }
+    
 
     override fun onDestroyView() {
         super.onDestroyView()

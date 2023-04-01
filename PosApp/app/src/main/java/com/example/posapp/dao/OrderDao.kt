@@ -2,6 +2,7 @@ package com.example.posapp.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.posapp.data.OrderFoodItem
 import com.example.posapp.data.OrdersData
 
 @Dao
@@ -31,8 +32,8 @@ interface OrderDao {
     @Query("DELETE FROM orders_table WHERE id = :id")
     fun deleteById(id: Int)
 
-    @Query("UPDATE orders_table SET total_price = :totalPrice WHERE id = :id")
-    suspend fun updateTotalPrice(id: Int, totalPrice: Int)
+    @Query("UPDATE orders_table SET total_price = :totalPrice WHERE order_id = :orderId")
+    suspend fun updateTotalPrice(orderId: String, totalPrice: Int)
 
     @Query("UPDATE orders_table SET order_status = :orderStatus WHERE id = :id")
     suspend fun updateStatus(id: Int, orderStatus: String)
@@ -40,15 +41,19 @@ interface OrderDao {
     @Query("UPDATE orders_table SET order_status = :orderStatus WHERE id = :id")
     suspend fun cancelOrder(id: Int, orderStatus: String)
 
-    @Update
-    suspend fun update(ordersData: OrdersData)
-
-    @Delete
-    suspend fun delete(ordersData: OrdersData)
-
     @Query("SELECT * FROM orders_table WHERE order_time = :timeInMillis")
     fun getOrderByTime(timeInMillis: Long): OrdersData?
 
     @Query("SELECT * FROM orders_table WHERE order_status = 'on_order'")
     fun searchOrdersByStatus(): List<OrdersData>
+
+    @Query("SELECT * FROM orders_table WHERE table_number = :tableNumber AND (order_status = 'on_order' OR order_status = 'offered') LIMIT 1")
+    fun getActiveOrderByTableNumber(tableNumber: Int): LiveData<OrdersData?>
+
+    @Query("SELECT * FROM orders_table WHERE table_number = :tableNumber AND order_status = 'unpaid' LIMIT 1")
+    fun getUnpaidOrderByTableNumber(tableNumber: Int): LiveData<OrdersData?>
+
+    @Query("SELECT * FROM orders_table WHERE order_id = :orderId")
+    fun getOrderById(orderId: String): LiveData<List<OrdersData>>
+
 }

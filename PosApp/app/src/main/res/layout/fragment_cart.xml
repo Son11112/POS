@@ -8,6 +8,20 @@
     android:background="@drawable/background_order"
     tools:context=".FragmentCart">
 
+    <TextView
+        android:id="@+id/tvPrice2"
+        android:layout_width="186dp"
+        android:layout_height="87dp"
+        android:layout_marginStart="356dp"
+        android:gravity="center"
+        android:text="テーブル："
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtTableNumBer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtTableNumBer"
+        app:layout_constraintVertical_bias="0.0" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,20 +30,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="203dp"
-            android:layout_height="68dp"
-            android:background="@color/black"
-            android:text="戻る"
-            android:textColor="@color/white"
-            android:textSize="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.958" />
 
         <Button
             android:id="@+id/btnDelete"
@@ -47,7 +47,7 @@
             android:layout_width="203dp"
             android:layout_height="68dp"
             android:background="@color/black"
-            android:text="支払いへ"
+            android:text="注文送信"
             android:textColor="@color/white"
             android:textSize="25dp" />
 
@@ -55,12 +55,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/productListRecyclerview"
-        android:layout_width="1257dp"
+        android:layout_width="match_parent"
         android:layout_height="527dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="92dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,27 +68,28 @@
         android:id="@+id/tvPrice"
         android:layout_width="186dp"
         android:layout_height="87dp"
-        android:layout_marginStart="684dp"
-        android:text="合計："
-        android:textSize="30dp"
-        android:textColor="@color/black"
+        android:layout_marginStart="856dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
+        android:text="合計："
+        android:textColor="@color/black"
+        android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productListRecyclerview"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/productListRecyclerview" />
 
     <TextView
         android:id="@+id/tvTotalPrice"
         android:layout_width="210dp"
         android:layout_height="87dp"
-        android:text="0"
         android:background="#EDD57E"
-        android:textSize="50dp"
-        android:textColor="@color/black"
         android:gravity="center"
+        android:text="0"
+        android:textColor="@color/black"
+        android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
         app:layout_constraintStart_toEndOf="@+id/tvPrice"
-        app:layout_constraintTop_toTopOf="@+id/tvPrice" />
+        app:layout_constraintTop_toTopOf="@+id/tvPrice"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView25"
@@ -105,5 +106,22 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvTotalPrice"
         app:layout_constraintTop_toTopOf="@+id/tvTotalPrice"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/edtTableNumBer"
+        android:layout_width="210dp"
+        android:layout_height="87dp"
+        android:layout_marginStart="544dp"
+        android:background="#EDD57E"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="番号"
+        android:inputType="number"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

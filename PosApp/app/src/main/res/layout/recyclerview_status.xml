@@ -61,21 +61,32 @@
         android:textColor="@color/black"
         android:text="Order Status"
         android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/tvPayMethod"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:text="支払い"
+            android:textSize="30dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="370dp"
+        android:layout_width="490dp"
         android:layout_gravity="right"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnStatusChange"
-            android:layout_width="10dp"
+            android:layout_width="30dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:textSize="30dp"
-            android:text="提供済み" />
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:text="提供済" />
 
         <Button
             android:id="@+id/btnDelete"
@@ -83,8 +94,20 @@
             android:layout_width="10dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:textSize="30dp"
-            android:text="注文削除" />
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:text="キャンセル" />
+
+        <Button
+            android:id="@+id/btnDetail"
+            android:layout_width="10dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:text="詳細"/>
+
     </LinearLayout>
     <TextView
         android:id="@+id/textView21"
@@ -97,4 +120,5 @@
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
 </LinearLayout>

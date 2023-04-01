@@ -18,6 +18,8 @@ data class OrdersData(
     val orderDate: String,
     @ColumnInfo(name = "order_time")
     val orderTime: String,
-//    @ColumnInfo(name = "table_number")
-//    val tableNumber: Int
+    @ColumnInfo(name = "table_number")
+    val tableNumber: Int,
+    @ColumnInfo(name = "pay_method")
+    val payMethod: String
 )

@@ -1,6 +1,5 @@
 package com.example.posapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,9 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.posapp.adapter.PayAdapter
 import com.example.posapp.data.MenuData
 import com.example.posapp.data.MyRoomDatabase
 import com.example.posapp.data.OrderFoodItem
@@ -29,14 +30,11 @@ import java.util.*
 
 class FragmentPay : Fragment() {
 
+    private lateinit var payAdapter: PayAdapter
     private lateinit var orderViewModel: OrderViewModel
-    private lateinit var menuViewModel: MenuViewModel
     private lateinit var _binding: FragmentPayBinding
     private val binding get() = _binding
     val menuData = mutableListOf<MenuData>()
-    private val calendar = Calendar.getInstance()
-    private val orderDates = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(calendar.time)
-    private val orderTimes = SimpleDateFormat("HHmmss", Locale.getDefault()).format(calendar.time)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,19 +55,25 @@ class FragmentPay : Fragment() {
         }
 
         // Khởi tạo ViewModel
-        val factory = MenuViewModelFactory(MyRoomDatabase.getDatabase(requireContext()).menuDao())
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
+            MyRoomDatabase.getDatabase(requireContext()).menuDao()
         )
-        menuViewModel = ViewModelProvider(this, factory).get(MenuViewModel::class.java)
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
 
-        var totalPrice = arguments?.getInt("totalPrice")
-        binding.paymentAmountEditText.text = totalPrice.toString() + "円"
+        payAdapter = PayAdapter(mutableListOf())
+        binding.recyclerviewPay.adapter = payAdapter
+
+      var totalPrice = 0
 
         binding.btnCash.isChecked = true
         binding.btnStatus.isEnabled = false
+        if (binding.paymentAmountEditText.text.isEmpty()){
+            binding.edtDepositAmount.visibility = View.GONE
+        }else{
+            binding.edtDepositAmount.visibility = View.VISIBLE
+        }
 
         binding.edtDepositAmount.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -91,7 +95,6 @@ class FragmentPay : Fragment() {
                     binding.edtChange.text = "0円"
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -111,8 +114,28 @@ class FragmentPay : Fragment() {
             }
         }
 
+        binding.btnSearch.setOnClickListener {
+            binding.btnPay.isEnabled = true
+            if (binding.edtTableNumBerPay.text.isNotEmpty()) {
+                val tableNumber = binding.edtTableNumBerPay.text.toString().toInt()
+
+                orderViewModel.getUnpaidOrderByTableNumber(tableNumber).observe(viewLifecycleOwner) { order ->
+                    if (order != null) {
+                        binding.edtDepositAmount.visibility = View.VISIBLE
+
+                        val orderId = order.orderId
+                        orderViewModel.getOrderFoodItemDetailsByOrderId(orderId).observe(viewLifecycleOwner) { menuDataList ->
+                            payAdapter.submitList(menuDataList)
+                        }
+                    } else {
+                        Toast.makeText(context, "Không tìm thấy đơn hàng chưa thanh toán cho bàn này", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+
         binding.btnCancel.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentPay_to_fragmentCart)
+            findNavController().navigate(R.id.action_fragmentPay_to_fragmentOrders)
         }
 
         binding.btnPay.setOnClickListener {
@@ -124,8 +147,6 @@ class FragmentPay : Fragment() {
                     if (changeNumber >= 0) {
                         binding.btnStatus.visibility = View.VISIBLE
                         Toast.makeText(context, "注文を確定しました", Toast.LENGTH_SHORT).show()
-//                  cập nhật database
-                        addNewItem()
                         binding.btnStatus.isEnabled = true
                         binding.btnPayPay.isEnabled = false
                         binding.btnCash.isEnabled = false
@@ -138,12 +159,8 @@ class FragmentPay : Fragment() {
                     Toast.makeText(context, "お金が足りませんでした", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                addNewItem()
-                binding.btnStatus.visibility = View.VISIBLE
-                binding.btnStatus.isEnabled = true
                 binding.btnPayPay.isEnabled = false
                 binding.btnCash.isEnabled = false
-                binding.btnCancel.isEnabled = false
                 binding.btnPay.isEnabled = false
                 Toast.makeText(context, "注文を確定しました", Toast.LENGTH_SHORT).show()
             }
@@ -174,64 +191,4 @@ class FragmentPay : Fragment() {
             binding.tvChange.visibility = View.GONE
         }
     }
-
-
-    @SuppressLint("SuspiciousIndentation")
-    private fun addNewItem() {
-
-        try {
-        val filteredMenuData = menuData.filter { it.tempQuantityInCart > 0 }
-        if (filteredMenuData.isNotEmpty()) {
-
-            val calendar = Calendar.getInstance()
-            val orderDate =
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-            val orderTime =
-                SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(calendar.time)
-            val totalPrice = arguments?.getInt("totalPrice")
-            val ordersData = OrdersData(
-                orderId = orderDates + orderTimes,
-                orderStatus = "on_order",
-                totalPrice = totalPrice!!,
-                orderDate = orderDate,
-                orderTime = orderTime
-            )
-
-            orderViewModel.insertOrder(ordersData)
-
-            filteredMenuData.map { menu ->
-                val totalPrice = arguments?.getInt("totalPrice")
-                val ordersData = OrdersData(
-                    orderId = orderDates + orderTimes,
-                    orderStatus = "on_order",
-                    totalPrice = totalPrice!!,
-                    orderDate = orderDate,
-                    orderTime = orderTime
-                )
-
-                val orderFoodItems = OrderFoodItem(
-                    orderId = ordersData.orderId,
-                    foodItemId = menu.id,
-                    quantityInCart = menu.tempQuantityInCart,
-                    productQuantityInStock = menu.productQuantity,
-                    productOrderImage = menu.productImage,
-                    productName = menu.productName,
-                    orderProductPrice = menu.productPrice,
-                )
-                orderViewModel.insertOrderItem(orderFoodItems)
-            }
-
-            filteredMenuData.forEach { menu ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    menuViewModel.updateQuantityInStock(menu.id, menu.productQuantity-menu.tempQuantityInCart)
-                    menuViewModel.updateTempQuantityInCart(menu.id, 0)
-                }
-            }
-        } else {
-            Toast.makeText(context, "カートは空です", Toast.LENGTH_SHORT).show()
-        }
-    }catch (e : Exception) {
-        Toast.makeText(context, "エラーありました", Toast.LENGTH_SHORT).show()
-    }
-}
 }

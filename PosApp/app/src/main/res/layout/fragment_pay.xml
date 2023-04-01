@@ -9,175 +9,131 @@
     android:background="@drawable/background_order"
     tools:context=".FragmentPay">
 
-
-    <LinearLayout
-        android:id="@+id/paymentHeaderLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/paymentHeaderTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="支払い"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/paymentTotalAmountTextView"
+        app:layout_constraintStart_toStartOf="@+id/paymentTotalAmountTextView" />
+
+    <TextView
+        android:id="@+id/paymentTotalAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="180dp"
+        android:text="お支払い合計金額"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/paymentHeaderTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="支払い"
-            android:textColor="@color/black"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/paymentTotalAmountTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="お支払い合計金額"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/paymentDetailsLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/paymentAmountEditText"
+        android:layout_width="470dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="left"
+        android:text="0"
+        android:textColor="@color/black"
+        android:textSize="50dp"
+        app:layout_constraintEnd_toEndOf="@+id/paymentTotalAmountTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/paymentTotalAmountTextView"
+        app:layout_constraintTop_toBottomOf="@+id/paymentTotalAmountTextView" />
+
+    <TextView
+        android:id="@+id/paymentMethodTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="268dp"
+        android:text="支払方法"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentHeaderLayout">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvPaymentAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="支払金額"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/paymentAmountEditText"
-            android:layout_width="470dp"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="0"
-            android:textColor="@color/black"
-            android:textSize="50dp" />
-
-        <TextView
-            android:id="@+id/paymentMethodTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="支払方法"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-        <RadioGroup
-            android:id="@+id/paymentMethodRadioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/btnCash"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="現金"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/btnPayPay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PayPay"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-        </RadioGroup>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="203dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/black"
+        android:text="戻る"
+        android:textColor="@color/white"
+        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.261"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="203dp"
-            android:layout_height="68dp"
-            android:background="@color/black"
-            android:text="戻る"
-            android:textColor="@color/white"
-            android:textSize="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.958" />
+    <Button
+        android:id="@+id/btnPay"
+        android:layout_width="203dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/black"
+        android:text="支払確定"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btnPay"
-            android:layout_width="203dp"
-            android:layout_height="68dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginEnd="36dp"
-            android:background="@color/black"
-            android:text="支払確定"
-            android:textColor="@color/white"
-            android:textSize="25dp" />
-
-        <Button
-            android:id="@+id/btnStatus"
-            android:layout_width="203dp"
-            android:layout_height="68dp"
-            android:background="@color/black"
-            android:text="注文状況"
-            android:textColor="@color/white"
-            android:textSize="25dp" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnStatus"
+        android:layout_width="203dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/black"
+        android:text="注文状況"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.734"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvDepositAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
         android:layout_marginLeft="14dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="448dp"
         android:text="お預かり金額"
+        android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.002"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentDetailsLayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtDepositAmount"
         android:layout_width="470dp"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginLeft="14dp"
+        android:ems="10"
         android:hint="預金額を入力"
-        android:textColor="@color/black"
-        android:textSize="50dp"
-        android:maxLength="7"
         android:inputType="number"
+        android:maxLength="7"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        android:textSize="50dp"
         app:layout_constraintEnd_toEndOf="@+id/tvDepositAmount"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.035"
+        app:layout_constraintStart_toStartOf="@+id/tvDepositAmount"
         app:layout_constraintTop_toBottomOf="@+id/tvDepositAmount" />
 
     <TextView
         android:id="@+id/tvChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
         android:text="お釣り"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -199,11 +155,175 @@
         android:id="@+id/imvPayPay"
         android:layout_width="409dp"
         android:layout_height="301dp"
-        android:layout_marginEnd="432dp"
+        android:layout_marginBottom="84dp"
         android:src="@drawable/paypay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paymentDetailsLayout"
-        app:layout_constraintVertical_bias="0.169" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioButton
+        android:id="@+id/btnPayPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PayPay"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/btnCash"
+        app:layout_constraintTop_toBottomOf="@+id/btnCash" />
+
+    <RadioButton
+        android:id="@+id/btnCash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="現金"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/paymentMethodTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/paymentMethodTextView"
+        app:layout_constraintTop_toBottomOf="@+id/paymentMethodTextView" />
+
+    <EditText
+        android:id="@+id/edtTableNumBerPay"
+        android:layout_width="129dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="テーブル番号"
+        android:inputType="number"
+        android:maxLength="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.012"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnSearch"
+        android:layout_width="59dp"
+        android:layout_height="59dp"
+        android:background="@color/purple_500"
+        android:src="?android:attr/actionModeWebSearchDrawable"
+        app:layout_constraintBottom_toBottomOf="@+id/edtTableNumBerPay"
+        app:layout_constraintStart_toEndOf="@+id/edtTableNumBerPay"
+        app:layout_constraintTop_toTopOf="@+id/edtTableNumBerPay" />
+
+    <LinearLayout
+        android:layout_width="632dp"
+        android:layout_height="579dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView46"
+                android:layout_width="70dp"
+                android:textColor="@color/black"
+                android:gravity="right"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+                android:layout_weight="1"
+                android:text="テーブル番号:" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:gravity="left"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:gravity="right"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="注文時:" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="left"
+                android:textSize="20dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="right"
+                android:textSize="20dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="提供状況:" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@color/black"
+                android:gravity="left"
+                android:textSize="20dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:layout_weight="1"
+                android:text="品名" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:layout_weight="1"
+                android:text="価格" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:layout_weight="1"
+                android:text="数量" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:layout_weight="1"
+                android:text="小計" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewPay"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

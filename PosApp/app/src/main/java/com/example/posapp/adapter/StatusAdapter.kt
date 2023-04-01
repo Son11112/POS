@@ -15,28 +15,33 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class StatusAdapter(
-    private val context: Context,
     var dataset : List<OrdersData>,
-    private var orderViewModel: OrderViewModel
+    private var orderViewModel: OrderViewModel,
+    private val onDetailButtonClickListener: OnDetailButtonClickListener
 ): RecyclerView.Adapter<StatusAdapter.StatusDataViewHolder>() {
 
-    inner class StatusDataViewHolder(val binding: RecyclerviewStatusBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class StatusDataViewHolder(val binding: RecyclerviewStatusBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         private val orderIdTextView: TextView = binding.tvOrderId
         private val orderDateTextView: TextView = binding.tvOrderDate
         private val orderTimeTextView: TextView = binding.tvOrderTime
         private val totalPriceTextView: TextView = binding.tvTotalPrice
         private val orderStatusTextView: TextView = binding.tvOrderStatus
+        private val payTextView: TextView = binding.tvPayMethod
 
-        fun bind(ordersData: OrdersData){
-            orderIdTextView.text= dataset[position].id.toString()
-            orderDateTextView.text= ordersData.orderDate
-            orderTimeTextView.text= ordersData.orderTime
-            totalPriceTextView.text = ordersData.totalPrice.toString()+"円"
-            orderStatusTextView.text= ordersData.orderStatus
+        fun bind(ordersData: OrdersData) {
+            orderIdTextView.text = ordersData.tableNumber.toString()
+            orderDateTextView.text = ordersData.orderDate
+            orderTimeTextView.text = ordersData.orderTime
+            totalPriceTextView.text = ordersData.totalPrice.toString() + "円"
+            orderStatusTextView.text = ordersData.orderStatus
+            if (ordersData.payMethod == "unpaid"){
+                payTextView.text = "未払い"
+            }
             binding.btnStatusChange.setOnClickListener {
                 CoroutineScope(Dispatchers.Main).launch {
                     val newStatus = "offered"
-                    orderViewModel.upDateStatus(dataset[position].id, newStatus)
+                    orderViewModel.updateStatus(dataset[position].id, newStatus)
                 }
             }
             binding.btnDelete.setOnClickListener {
@@ -45,11 +50,18 @@ class StatusAdapter(
                     orderViewModel.cancelOrder(dataset[position].id, newStatus)
                 }
             }
+            binding.btnDetail.setOnClickListener {
+                onDetailButtonClickListener.onDetailButtonClick(ordersData.orderId)
+            }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatusAdapter.StatusDataViewHolder {
-        val binding = RecyclerviewStatusBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): StatusAdapter.StatusDataViewHolder {
+        val binding =
+            RecyclerviewStatusBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return StatusDataViewHolder(binding)
     }
 
@@ -67,5 +79,9 @@ class StatusAdapter(
     fun setData(newData: List<OrdersData>) {
         dataset = newData
         notifyDataSetChanged()
+    }
+
+    interface OnDetailButtonClickListener {
+        fun onDetailButtonClick(orderId: String)
     }
 }

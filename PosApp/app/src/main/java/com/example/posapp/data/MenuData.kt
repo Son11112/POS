@@ -19,8 +19,6 @@ data class MenuData (
     @ColumnInfo(name = "quantity_in_stock")
     val productQuantity : Int,
     @ColumnInfo(name = "image")
-    val productImage : ByteArray? = null,
-    @ColumnInfo(name = "temp_quantity_in_cart")
-    var tempQuantityInCart: Int
+    val productImage : ByteArray? = null
 
-    )
+)

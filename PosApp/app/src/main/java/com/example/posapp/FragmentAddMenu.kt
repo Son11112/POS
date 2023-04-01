@@ -29,7 +29,7 @@ class FragmentAddMenu : Fragment() {
     private lateinit var imageView: ImageView
     private var productKinds: String = ""
     private var productType: String = ""
-    private var tempQuantityInCart: Int = 0
+//    private var tempQuantityInCart: Int = 0
     private var selectedCheckbox: CheckBox? = null
     private var _binding: FragmentAddMenuBinding? = null
     private val binding get() = _binding!!
@@ -145,7 +145,7 @@ class FragmentAddMenu : Fragment() {
             quantity,
             convertBitmapToByteArray(binding.imgImage.drawToBitmap()),
             productType,
-            tempQuantityInCart
+//            tempQuantityInCart
         )
         // Clear input fields
         binding.edtPrice.setText("")

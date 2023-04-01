@@ -29,17 +29,14 @@ interface MenuDao {
     @Query("SELECT * FROM menu_table WHERE type = 'DRINK'")
     fun getDrinks(): LiveData<List<MenuData>>
 
-    @Query("UPDATE menu_table SET temp_quantity_in_cart = :quantity WHERE id = :id")
-    suspend fun updateTempQuantityInCart(id: Int, quantity: Int)
+    @Query("SELECT * FROM menu_table WHERE id = :itemId")
+    suspend fun getItemById(itemId: Int): MenuData
 
     @Query("UPDATE menu_table SET quantity_in_stock = :QuantityInStock WHERE id = :id")
     suspend fun updateQuantityInStock(id: Int, QuantityInStock: Int)
 
-    @Query("SELECT * FROM menu_table WHERE temp_quantity_in_cart > 0")
-     fun getSelectedMenuWithQuantity(): LiveData<List<MenuData>>
-
-    @Query("UPDATE menu_table SET temp_quantity_in_cart = 0")
-    fun resetTempQuantity()
+    @Query("SELECT * FROM menu_table WHERE id = :foodItemId")
+    fun getMenuDataByFoodItemId(foodItemId: Int): LiveData<MenuData>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(menuData: MenuData)
@@ -47,17 +44,14 @@ interface MenuDao {
     @Query("SELECT * FROM menu_table")
     fun getAllMenu(): LiveData<List<MenuData>>
 
-    @Query("SELECT * FROM menu_table WHERE temp_quantity_in_cart != 0")
-    fun getTempMenu(): LiveData<List<MenuData>>
+//    @Query("SELECT * FROM menu_table WHERE temp_quantity_in_cart != 0")
+//    fun getTempMenu(): LiveData<List<MenuData>>
 
     @Query("DELETE FROM menu_table WHERE id=:id")
     suspend fun deleteMenu(id: Int)
 
     @Update
     suspend fun update(menuData: MenuData)
-
-    @Delete
-    suspend fun delete(menuData: MenuData)
 
 }
 

@@ -61,8 +61,7 @@ class MenuAdapter(
                         newName,
                         newPrice,
                         newQuantity,
-                        menuData.productImage?.copyOf(),
-                        menuData.tempQuantityInCart
+                        menuData.productImage?.copyOf()
                     )
                 }
                         Toast.makeText(fragmentMenu.context, "更新しました！", Toast.LENGTH_SHORT).show()
@@ -100,9 +99,9 @@ class MenuAdapter(
         AlertDialog.Builder(fragmentMenu.requireContext())
             .setTitle("確認")
             .setMessage("本当に削除しますか？")
+
             .setPositiveButton("はい") { dialog, _ ->
-                // Xác nhận xóa dữ liệu
-                CoroutineScope(Dispatchers.Main).launch {
+                           CoroutineScope(Dispatchers.Main).launch {
                     menuViewModel.deleteMenu(Id)
                 }
                 Toast.makeText(fragmentMenu.context, "削除しました！", Toast.LENGTH_SHORT).show()

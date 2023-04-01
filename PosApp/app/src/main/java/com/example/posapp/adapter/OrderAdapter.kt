@@ -1,6 +1,8 @@
 package com.example.posapp.adapter
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.posapp.adapter.OrderAdapter.OrderDataViewHolder
 import com.example.posapp.data.MenuData
-import com.example.posapp.data.OrdersData
 import com.example.posapp.databinding.OrderItemBinding
 import com.example.posapp.viewModel.MenuViewModel
 
@@ -18,6 +19,8 @@ class OrderAdapter(
     var dataset: List<MenuData>,
     private val menuViewModel: MenuViewModel
 ) : RecyclerView.Adapter<OrderDataViewHolder>() {
+
+    private val tempQuantityMap = mutableMapOf<Int, Int>()
 
     inner class OrderDataViewHolder(val binding: OrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val priceTextView: TextView = binding.tvPrice
@@ -30,7 +33,6 @@ class OrderAdapter(
             priceTextView.text = menuData.productPrice.toString()
             quantityTextView.text = menuData.productQuantity.toString()
             nameTextView.text = menuData.productName
-            quantityOfCartTextView.text = menuData.tempQuantityInCart.toString()
             if (menuData.productImage != null) {
                 Glide.with(context)
                     .asBitmap()
@@ -39,18 +41,26 @@ class OrderAdapter(
             } else {
                 imageView.setImageBitmap(null)
             }
+
+            // Cập nhật số lượng giỏ hàng từ tempQuantityMap
+            quantityOfCartTextView.text = tempQuantityMap[menuData.id]?.toString() ?: "0"
+
             binding.btnIncreaseQuantity.setOnClickListener {
                 if (quantityOfCartTextView.text.toString().toInt() < quantityTextView.text.toString().toInt()) {
-                    menuData.tempQuantityInCart++
-                    binding.tvQuantityOfCart.text = menuData.tempQuantityInCart.toString()
+                    val newQuantity = quantityOfCartTextView.text.toString().toInt() + 1
+                    tempQuantityMap[menuData.id] = newQuantity
+                    quantityOfCartTextView.text = newQuantity.toString()
                 }
             }
+
             binding.btnDecreaseQuantity.setOnClickListener {
-                if(menuData.tempQuantityInCart >0 ){
-                    menuData.tempQuantityInCart --
-                    binding.tvQuantityOfCart.text = menuData.tempQuantityInCart.toString()
-               }
-           }
+                val currentQuantity = quantityOfCartTextView.text.toString().toInt()
+                if (currentQuantity > 0) {
+                    val newQuantity = currentQuantity - 1
+                    tempQuantityMap[menuData.id] = newQuantity
+                    quantityOfCartTextView.text = newQuantity.toString()
+                }
+            }
         }
     }
 
@@ -74,4 +84,13 @@ class OrderAdapter(
     }
 
     fun getItem(position: Int) = dataset[position]
+
+    fun getQuantityAt(foodItemId: Int): Int {
+        return tempQuantityMap[foodItemId] ?: 0
+    }
+
+    fun getSelectedItems(): List<Pair<MenuData, Int>> {
+        return dataset.filter { tempQuantityMap[it.id] != null && tempQuantityMap[it.id]!! > 0 }
+            .map { it to tempQuantityMap[it.id]!! }
+    }
 }

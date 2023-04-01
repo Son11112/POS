@@ -15,13 +15,5 @@ data class OrderFoodItem(
     var foodItemId: Int = 0,
     @ColumnInfo(name = "quantity_in_cart")
     var quantityInCart: Int,
-    @ColumnInfo(name = "quantity_in_stock")
-    val productQuantityInStock : Int,
-    @ColumnInfo(name = "name")
-    val productName : String,
-    @ColumnInfo(name = "order_image")
-    var productOrderImage: ByteArray? = null,
-    @ColumnInfo(name = "order_product_price")
-    var orderProductPrice: Int
 
 )

@@ -21,29 +21,23 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
         return menuDao.getAllMenu()
     }
 
-    fun getTempMenu(): LiveData<List<MenuData>> {
-        return menuDao.getTempMenu()
+    suspend fun getItemById(Id: Int): MenuData {
+        return menuDao.getItemById(Id)
     }
 
     fun getMainFoods(): LiveData<List<MenuData>> {
         return menuDao.getMainFoods()
     }
 
-    suspend fun updateTempQuantityInCart(id: Int, tempQuantityInCart: Int) {
-        withContext(Dispatchers.IO) {
-            menuDao.updateTempQuantityInCart(id, tempQuantityInCart)
-        }
-    }
+//    suspend fun updateTempQuantityInCart(id: Int, tempQuantityInCart: Int) {
+//        withContext(Dispatchers.IO) {
+//            menuDao.updateTempQuantityInCart(id, tempQuantityInCart)
+//        }
+//    }
 
     suspend fun updateQuantityInStock(id: Int, QuantityInStock: Int) {
         withContext(Dispatchers.IO) {
             menuDao.updateQuantityInStock(id, QuantityInStock)
-        }
-    }
-
-    suspend fun resetTempQuantity() {
-        withContext(Dispatchers.IO) {
-            menuDao.resetTempQuantity()
         }
     }
 
@@ -55,7 +49,6 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
         productPrice: Int,
         productQuantity: Int,
         productImage: ByteArray?,
-        tempQuantityInCart: Int
     ) {
         withContext(Dispatchers.IO) {
             val menuData = MenuData(
@@ -65,8 +58,7 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
                 productName = productName,
                 productPrice = productPrice,
                 productQuantity = productQuantity,
-                productImage = productImage,
-                tempQuantityInCart = tempQuantityInCart,
+                productImage = productImage
             )
             menuDao.update(menuData)
         }
@@ -93,7 +85,6 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
         productQuantity: Int,
         productImage: ByteArray,
         productType: String,
-        tempQuantityInCart: Int
     ) {
         val newItem = MenuData(
             productKinds = productKinds,
@@ -102,7 +93,6 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
             productQuantity = productQuantity,
             productImage = productImage,
             productType = productType,
-            tempQuantityInCart = tempQuantityInCart
         )
         insertItem(newItem)
     }

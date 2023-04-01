@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/background_home"
-    android:padding="20dp">
+    android:padding="0dp">
 
 
     <LinearLayout
@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="#70FF9800"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -21,9 +22,8 @@
             android:id="@+id/order_id"
             android:layout_width="100dp"
             android:layout_height="45dp"
-            android:background="#70FF9800"
             android:gravity="center"
-            android:text="番号"
+            android:text="テーブル番号"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
@@ -32,7 +32,6 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="#70FF9800"
             android:gravity="center"
             android:text="注文日付"
             android:textColor="@color/black"
@@ -43,7 +42,6 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="#70FF9800"
             android:gravity="center"
             android:text="注文時間"
             android:textColor="@color/black"
@@ -53,7 +51,6 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="#70FF9800"
             android:gravity="center"
             android:text="注文金額"
             android:textColor="@color/black"
@@ -64,24 +61,33 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="#70FF9800"
             android:gravity="center"
             android:text="状況"
             android:textColor="@color/black"
             android:textSize="16sp" />
-    </LinearLayout>
 
+        <TextView
+            android:id="@+id/order_method"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="支払い"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="635dp"
-        android:layout_marginBottom="42dp"
+        android:layout_width="1293dp"
+        android:layout_height="664dp"
+        android:layout_marginBottom="99dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.589"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerviewStatus"
@@ -96,12 +102,69 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="1238dp"
+            android:id="@+id/recyclerviewOrderDetail"
+            android:layout_width="match_parent"
             android:layout_height="283dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerviewStatus" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerviewStatus"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerviewOrderDetail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="#7035BA9B"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerviewStatus" >
+
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="120dp"
+                android:layout_height="30dp"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:text="   注文詳細" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="品名"/>
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="価格"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text=" 在庫"/>
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text="カート数"/>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

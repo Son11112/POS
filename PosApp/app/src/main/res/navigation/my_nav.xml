@@ -156,25 +156,13 @@
         android:label="fragment_orders"
         tools:layout="@layout/fragment_orders" >
         <action
-            android:id="@+id/action_fragmentOrders_to_fragmentCart"
-            app:destination="@id/fragmentCart" />
-        <action
             android:id="@+id/action_fragmentOrders_to_fragmentLogin"
             app:destination="@id/fragmentLogin" />
         <action
             android:id="@+id/action_fragmentOrders_to_fragmentStatus"
             app:destination="@id/fragmentStatus" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentCart"
-        android:name="com.example.posapp.FragmentCart"
-        android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" >
         <action
-            android:id="@+id/action_fragmentCart_to_fragmentOrders"
-            app:destination="@id/fragmentOrders" />
-        <action
-            android:id="@+id/action_fragmentCart_to_fragmentPay"
+            android:id="@+id/action_fragmentOrders_to_fragmentPay"
             app:destination="@id/fragmentPay" />
     </fragment>
     <fragment
@@ -183,11 +171,11 @@
         android:label="fragment_pay"
         tools:layout="@layout/fragment_pay" >
         <action
-            android:id="@+id/action_fragmentPay_to_fragmentCart"
-            app:destination="@id/fragmentCart" />
-        <action
             android:id="@+id/action_fragmentPay_to_fragmentStatus"
             app:destination="@id/fragmentStatus" />
+        <action
+            android:id="@+id/action_fragmentPay_to_fragmentOrders"
+            app:destination="@id/fragmentOrders" />
     </fragment>
     <fragment
         android:id="@+id/fragmentStatus"
