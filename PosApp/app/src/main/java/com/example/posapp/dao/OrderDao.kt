@@ -35,8 +35,8 @@ interface OrderDao {
     @Query("UPDATE orders_table SET order_status = :orderStatus WHERE id = :id")
     suspend fun updateStatus(id: Int, orderStatus: String)
 
-    @Query("UPDATE orders_table SET order_status = :orderStatus WHERE id = :id")
-    suspend fun cancelOrder(id: Int, orderStatus: String)
+    @Query("UPDATE orders_table SET order_status = :orderStatus, total_price = :totalPrice WHERE id = :id")
+    suspend fun cancelOrder(id: Int, orderStatus: String, totalPrice: Int)
 
     @Query("SELECT * FROM orders_table WHERE order_time = :timeInMillis")
     fun getOrderByTime(timeInMillis: Long): OrdersData?

@@ -50,14 +50,10 @@ class OrderViewModel(
         }
     }
 
-    fun cancelOrder(id: Int, orderStatus: String) {
+    fun cancelOrder(id: Int, orderStatus: String, totalPrice: Int) {
         viewModelScope.launch {
-            orderDao.cancelOrder(id, orderStatus)
+            orderDao.cancelOrder(id, orderStatus, totalPrice)
         }
-    }
-
-    fun getActiveOrderByTableNumber(tableNumber: Int): LiveData<OrdersData?> {
-        return orderDao.getActiveOrderByTableNumber(tableNumber)
     }
 
     fun getOrderById(orderId: String): LiveData<List<OrdersData>> {
@@ -68,17 +64,22 @@ class OrderViewModel(
         return orderFoodItemDao.getOrderFoodItemsByOrderId(orderId)
     }
 
+    suspend fun updateMenuDataQuantity(foodItemId: Int, quantity: Int) {
+        withContext(Dispatchers.IO) {
+            var menuData = menuDao.getMenuDataByFoodItemId(foodItemId)
+            if (menuData != null) {
+                menuData.productQuantity += quantity
+                menuDao.update(menuData)
+            }
+        }
+    }
+
     fun orderFoodItemsByOrderId(orderId: String): LiveData<List<OrderFoodItem>> {
         return orderFoodItemDao.orderFoodItemsByOrderId(orderId)
     }
 
-    suspend fun updateOrderItem(orderFoodItem: OrderFoodItem) {
-        val existingItem =
-            orderFoodItemDao.getOrderFoodItem(orderFoodItem.orderId, orderFoodItem.foodItemId)
-        if (existingItem != null) {
-            existingItem.quantityInCart += orderFoodItem.quantityInCart
-            orderFoodItemDao.update(existingItem)
-        }
+    suspend fun updateOrderItem(orderId: String, quantity: Int) {
+        orderFoodItemDao.update(orderId, quantity)
     }
 
     suspend fun updateTotalPrice(orderId: String, totalPrice: Int) {

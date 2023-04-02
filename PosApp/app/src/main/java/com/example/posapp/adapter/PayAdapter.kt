@@ -35,9 +35,7 @@ class PayAdapter(
             productPricePayTextView.text = ordersData.orderStatus
             quantityOfCartPay.text = ordersData.totalPrice.toString()
             pricePay.text = ordersData.payMethod
-            if (ordersData.payMethod =="unpaid"){
-                binding.btnCheckPay.visibility = View.VISIBLE
-            }
+
         }
     }
 
@@ -50,6 +48,10 @@ class PayAdapter(
     override fun onBindViewHolder(holder: PayAdapter.PayDataViewHolder, position: Int) {
         val item = dataset[position]
         holder.bind(item)
+
+        if (item.orderStatus =="canceled"){
+            holder.binding.btnCheckPay.visibility = View.INVISIBLE
+        }
     }
 
     override fun getItemCount(): Int {

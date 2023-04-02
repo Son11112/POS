@@ -7,18 +7,18 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "menu_table")
 data class MenuData (
     @PrimaryKey(autoGenerate = true)
-    val id: Int= 0,
+    var id: Int= 0,
     @ColumnInfo(name = "kinds")
-    val productKinds : String,
+    var productKinds : String,
     @ColumnInfo(name = "type")
-    val productType : String,
+    var productType : String,
     @ColumnInfo(name = "name")
-    val productName : String,
+    var productName : String,
     @ColumnInfo(name = "price")
-    val productPrice : Int,
+    var productPrice : Int,
     @ColumnInfo(name = "quantity_in_stock")
-    val productQuantity : Int,
+    var productQuantity : Int,
     @ColumnInfo(name = "image")
-    val productImage : ByteArray? = null
+    var productImage : ByteArray? = null
 
 )

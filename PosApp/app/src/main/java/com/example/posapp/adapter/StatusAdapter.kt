@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class StatusAdapter(
     var dataset : List<OrdersData>,
     private var orderViewModel: OrderViewModel,
-    private val onDetailButtonClickListener:OnDetailButtonClickListener,
+    private val onDetailButtonClickListener: OnDetailButtonClickListener,
     private val fragmentStatus: FragmentStatus
 ): RecyclerView.Adapter<StatusAdapter.StatusDataViewHolder>() {
 
@@ -42,8 +42,7 @@ class StatusAdapter(
             payTextView.text = ordersData.payMethod
 
             binding.btnStatusChange.setOnClickListener {
-                binding.btnStatusChange.visibility = View.INVISIBLE
-                binding.btnDelete.visibility = View.INVISIBLE
+
                 AlertDialog.Builder(fragmentStatus.requireContext())
                     .setTitle("確認")
                     .setMessage("更新しますか？")
@@ -63,16 +62,21 @@ class StatusAdapter(
 
 
             binding.btnDelete.setOnClickListener {
-                binding.btnStatusChange.visibility = View.INVISIBLE
-                binding.btnDelete.visibility = View.INVISIBLE
 
                 AlertDialog.Builder(fragmentStatus.requireContext())
                     .setTitle("確認")
                     .setMessage("更新しますか？")
                     .setPositiveButton("はい") { dialog, _ ->
                         CoroutineScope(Dispatchers.Main).launch {
-                            val newStatus = "canceled"
-                            orderViewModel.cancelOrder(dataset[position].id, newStatus)
+
+                            val orderId = dataset[position].orderId
+                            val orderFoodItems = orderViewModel.getOrderFoodItemsByOrderId(orderId)
+                            for (item in orderFoodItems) {
+                                orderViewModel.updateMenuDataQuantity(item.foodItemId, item.quantityInCart)
+                                orderViewModel.updateOrderItem(item.orderId, 0)
+                            }
+
+                            orderViewModel.cancelOrder(dataset[position].id, "canceled",0)
                         }
                         Toast.makeText(fragmentStatus.context, "キャンセルしました！", Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
@@ -82,7 +86,6 @@ class StatusAdapter(
                     }
                     .show()
             }
-
 
             binding.btnDetail.setOnClickListener {
                 onDetailButtonClickListener.onDetailButtonClick(ordersData.orderId)
@@ -102,6 +105,14 @@ class StatusAdapter(
     override fun onBindViewHolder(holder: StatusAdapter.StatusDataViewHolder, position: Int) {
         val item = dataset[position]
         holder.bind(item)
+
+        if (item.orderStatus == "on_order") {
+            holder.binding.btnStatusChange.visibility = View.VISIBLE
+            holder.binding.btnDelete.visibility = View.VISIBLE
+        } else {
+            holder.binding.btnStatusChange.visibility = View.GONE
+            holder.binding.btnDelete.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int {

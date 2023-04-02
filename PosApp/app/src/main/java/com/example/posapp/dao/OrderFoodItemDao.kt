@@ -38,14 +38,14 @@ interface OrderFoodItemDao {
     @Query("UPDATE orders_food_items SET quantity_in_cart = :quantity WHERE id = :id")
     suspend fun updateQuantityInCart(id: Int, quantity: Int)
 
+    @Query("UPDATE orders_food_items SET quantity_in_cart = :quantity WHERE order_id = :orderId")
+    suspend fun update(orderId: String, quantity: Int)
+
     @Query("SELECT * FROM orders_food_items WHERE order_id = :orderId")
     suspend fun getOrderFoodItemsByOrderId(orderId: String): List<OrderFoodItem>
 
     @Query("SELECT * FROM orders_food_items WHERE order_id = :orderId")
     fun orderFoodItemsByOrderId(orderId: String): LiveData<List<OrderFoodItem>>
-
-    @Update
-    suspend fun update(orderFoodItem: OrderFoodItem)
 
     @Delete
     suspend fun delete(orderFoodItem: OrderFoodItem)

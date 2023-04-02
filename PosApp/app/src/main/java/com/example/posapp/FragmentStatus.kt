@@ -57,7 +57,7 @@ class FragmentStatus : Fragment(), StatusAdapter.OnDetailButtonClickListener {
         }
 
         // Khởi tạo StatusAdapter
-        statusAdapter = StatusAdapter(mutableListOf(), orderViewModel,this)
+        statusAdapter = StatusAdapter(mutableListOf(), orderViewModel,this,this)
 
         // Khởi tạo DetailAdapter
         detailAdapter = DetailAdapter(menuDataList)

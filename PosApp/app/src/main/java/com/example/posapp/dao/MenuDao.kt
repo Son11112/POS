@@ -37,7 +37,7 @@ interface MenuDao {
     suspend fun updateQuantityInStock(id: Int, QuantityInStock: Int)
 
     @Query("SELECT * FROM menu_table WHERE id = :foodItemId")
-    fun getMenuDataByFoodItemId(foodItemId: Int): LiveData<MenuData>
+    fun getMenuDataByFoodItemId(foodItemId: Int): MenuData?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(menuData: MenuData)
