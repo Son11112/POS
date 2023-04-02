@@ -91,6 +91,10 @@ class FragmentAddShift : Fragment() {
             addNewItem()
         }
         binding.btnExitToShifts.setOnClickListener {
+            findNavController().navigate(R.id.action_fragmentAddShift_to_fragmentHome)
+        }
+
+        binding.btnShifts.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentAddShift_to_fragmentShifts)
         }
     }

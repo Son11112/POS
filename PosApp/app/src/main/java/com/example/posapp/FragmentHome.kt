@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.myapp.data.ShiftsHomeAdapter
 import com.example.posapp.viewModel.ShiftsViewModel
@@ -18,6 +19,7 @@ import com.example.posapp.data.MyRoomDatabase
 import com.example.posapp.databinding.FragmentHomeBinding
 import com.example.posapp.viewModel.OrderViewModel
 import com.example.posapp.viewModel.OrderViewModelFactory
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -76,15 +78,22 @@ class FragmentHome : Fragment() {
             }
         }
 
-        val resultText = StringBuilder()
-//        orderViewModel.getTopSellingItemsInPeriod(startPeriod, endPeriod, 1)
-//            .observe(viewLifecycleOwner) { topSellingItems ->
-//                // Cập nhật giao diện người dùng với danh sách topSellingItems
-//                topSellingItems.forEach { item ->
-//                    resultText.append("${item.productName}: ${item.totalQuantitySold}\n個")
-//                }
-//                binding.sold.text = resultText.toString()
-//            }
+        val textViewSoldOne: TextView = binding.tvSoldOne
+        val textViewSoldTwo: TextView = binding.tvSoldTwo
+        val textViewSoldThree: TextView = binding.tvSoldThree
+
+        lifecycleScope.launch {
+            val topThreeSoldItems = orderViewModel.getTopThreeSoldItems()
+            if (topThreeSoldItems.isNotEmpty()) {
+                textViewSoldOne.text = "${topThreeSoldItems[0].name} - ${topThreeSoldItems[0].totalSold}"
+            }
+            if (topThreeSoldItems.size >= 2) {
+                textViewSoldTwo.text = "${topThreeSoldItems[1].name} - ${topThreeSoldItems[1].totalSold}"
+            }
+            if (topThreeSoldItems.size >= 3) {
+                textViewSoldThree.text = "${topThreeSoldItems[2].name} - ${topThreeSoldItems[2].totalSold}"
+            }
+        }
 
         orderViewModel.totalRevenueToday.observe(viewLifecycleOwner) { revenue ->
             dayView.text = "$revenue"+"円"
@@ -111,7 +120,7 @@ class FragmentHome : Fragment() {
             findNavController().navigate(R.id.action_fragmentHome_to_fragmentNotifications)
         }
         binding.btnShiftConfirmation.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentHome_to_fragmentShifts)
+            findNavController().navigate(R.id.action_fragmentHome_to_fragmentAddShift)
         }
 
         val textViewDate = view.findViewById<TextView>(R.id.tvDate)

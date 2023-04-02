@@ -32,25 +32,17 @@ class UsersAdapter(
         private val passTextView: TextView = binding.tvPass
         private val birthTextView: TextView = binding.tvBirth
         private val phoneTextView: TextView = binding.tvPhone
-        private val btnPass: TextView = binding.btnPass
 
         fun bind(userData: UserData) {
-            if (userData.role == "staff"){
-                btnPass.visibility = View.INVISIBLE
-            } else {
-                btnPass.visibility = View.VISIBLE
-            }
-            passTextView.visibility = View.INVISIBLE
             employeeNameTextView.text = userData.employeeName
             employeeCodeTextView.text = userData.employeeCode
             roleTextView.text = userData.role
-            passTextView.text = userData.password
             birthTextView.text = userData.birth
             phoneTextView.text = userData.phone
 
-            binding.btnDelete.setOnClickListener {
-                showDeleteConfirmationDialog(dataset[position].id)
-            }
+            if (userData.role == "admin")
+            binding.btnPass.visibility = View.VISIBLE
+
             binding.btnPass.setOnClickListener {
                 if (passTextView.visibility == View.INVISIBLE) {
                     passTextView.visibility = View.VISIBLE
@@ -58,6 +50,11 @@ class UsersAdapter(
                     passTextView.visibility = View.INVISIBLE
                 }
             }
+
+            binding.btnDelete.setOnClickListener {
+                showDeleteConfirmationDialog(dataset[position].id)
+            }
+
             binding.btnUpdate.setOnClickListener {
                 val newName = binding.tvName.text.toString()
                 val newPhone = binding.tvPhone.text.toString()

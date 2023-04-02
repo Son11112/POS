@@ -27,13 +27,9 @@ class FragmentShifts : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_shifts, container, false)
 
-        val buttonAddShift = view.findViewById<Button>(R.id.btnToAddShift)
-        buttonAddShift.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentShifts_to_fragmentAddShift)
-    }
         val buttonExitToHome = view.findViewById<Button>(R.id.btnExitToHome)
         buttonExitToHome.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentShifts_to_fragmentHome)
+            findNavController().navigate(R.id.action_fragmentShifts_to_fragmentAddShift)
         }
         return view
     }

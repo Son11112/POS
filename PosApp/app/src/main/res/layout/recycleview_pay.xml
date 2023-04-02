@@ -1,57 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="632dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#EDECD1"
+    android:background="#FBFBEF"
     android:padding="1dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvProductNamePay"
+        <CheckBox
+            android:id="@+id/btnCheckPay"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:textSize="30dp"
-            android:layout_weight="1"
-            android:text="品名" />
+            android:visibility="invisible"
+            android:text="" />
 
         <TextView
-            android:id="@+id/tvProductPricePay"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvTablePay"
+            android:layout_width="220dp"
             android:layout_height="match_parent"
             android:textColor="@color/black"
             android:gravity="center"
             android:textSize="30dp"
-            android:layout_weight="1"
-            android:text="価格" />
+            android:text="テーブル番号" />
 
         <TextView
-            android:id="@+id/tvQuantityOfCartPay"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvOrderPay"
+            android:layout_width="170dp"
             android:layout_height="match_parent"
             android:textColor="@color/black"
             android:gravity="center"
             android:textSize="30dp"
-            android:layout_weight="1"
-            android:text="数量" />
+            android:text="提供状況" />
 
         <TextView
-            android:id="@+id/tvPricePay"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvTotalPay"
+            android:layout_width="170dp"
             android:layout_height="match_parent"
             android:textColor="@color/black"
             android:gravity="center"
             android:textSize="30dp"
-            android:layout_weight="1"
-            android:text="小計" />
+            android:text="注文金額" />
+
+        <TextView
+            android:id="@+id/tvPay"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:text="paypay支払い" />
+
 
     </LinearLayout>
     <TextView

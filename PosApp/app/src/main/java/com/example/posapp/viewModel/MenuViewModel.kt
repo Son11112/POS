@@ -5,35 +5,23 @@ import android.os.Bundle
 import androidx.lifecycle.*
 import com.example.posapp.dao.MenuDao
 import com.example.posapp.data.MenuData
+import com.example.posapp.data.OrderFoodItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
 
-    // Key để lưu trữ Uri của ảnh trong bundle
     private val KEY_IMAGE_URI = "image_uri"
-
-    // LiveData để lưu trữ trạng thái của ImageView
     private var _imageUri: Uri? = null
 
     fun getAllMenu(): LiveData<List<MenuData>> {
         return menuDao.getAllMenu()
     }
 
-    suspend fun getItemById(Id: Int): MenuData {
-        return menuDao.getItemById(Id)
-    }
-
     fun getMainFoods(): LiveData<List<MenuData>> {
         return menuDao.getMainFoods()
     }
-
-//    suspend fun updateTempQuantityInCart(id: Int, tempQuantityInCart: Int) {
-//        withContext(Dispatchers.IO) {
-//            menuDao.updateTempQuantityInCart(id, tempQuantityInCart)
-//        }
-//    }
 
     suspend fun updateQuantityInStock(id: Int, QuantityInStock: Int) {
         withContext(Dispatchers.IO) {
@@ -101,6 +89,10 @@ class MenuViewModel(private val menuDao: MenuDao) : ViewModel() {
         viewModelScope.launch {
             menuDao.insert(menuData)
         }
+    }
+
+    suspend fun getItemById(id: Int): MenuData {
+        return menuDao.getItemById(id)
     }
 
     // Lưu trữ trạng thái của ImageView

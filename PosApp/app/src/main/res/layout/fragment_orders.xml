@@ -88,7 +88,7 @@
 
     <TextView
         android:id="@+id/textView18"
-        android:layout_width="450dp"
+        android:layout_width="350dp"
         android:layout_height="97dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
@@ -104,19 +104,20 @@
         android:id="@+id/btnOrder"
         android:layout_width="170dp"
         android:layout_height="60dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="360dp"
         android:text="オーダー"
         android:textSize="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView18"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toTopOf="@+id/textView18" />
+        app:layout_constraintBottom_toBottomOf="@+id/btnPay"
+        app:layout_constraintStart_toEndOf="@+id/btnPay"
+        app:layout_constraintTop_toTopOf="@+id/btnPay"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnCart"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
-        android:text="カート追加"
+        android:text="注文確定"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnOrder"
         app:layout_constraintStart_toEndOf="@+id/btnOrder"
@@ -127,19 +128,18 @@
         android:id="@+id/btnLogOut"
         android:layout_width="170dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="236dp"
+        android:layout_marginStart="84dp"
         android:text="ログアウト"
         android:textSize="25dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView18"
-        app:layout_constraintEnd_toStartOf="@+id/textView18"
-        app:layout_constraintTop_toTopOf="@+id/textView18"
-        app:layout_constraintVertical_bias="0.513" />
+        app:layout_constraintBottom_toTopOf="@+id/OrderRecyclerview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnPay"
         android:layout_width="170dp"
         android:layout_height="60dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="36dp"
         android:text="会計"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnLogOut"
@@ -156,9 +156,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnDessert"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView18"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/edtTableNumBer"

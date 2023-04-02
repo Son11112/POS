@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.example.posapp.FragmentStatus
 import com.example.posapp.data.MenuData
 import com.example.posapp.data.OrdersData
 import com.example.posapp.databinding.RecyclerviewStatusBinding
@@ -17,7 +20,8 @@ import kotlinx.coroutines.launch
 class StatusAdapter(
     var dataset : List<OrdersData>,
     private var orderViewModel: OrderViewModel,
-    private val onDetailButtonClickListener: OnDetailButtonClickListener
+    private val onDetailButtonClickListener:OnDetailButtonClickListener,
+    private val fragmentStatus: FragmentStatus
 ): RecyclerView.Adapter<StatusAdapter.StatusDataViewHolder>() {
 
     inner class StatusDataViewHolder(val binding: RecyclerviewStatusBinding) :
@@ -35,21 +39,51 @@ class StatusAdapter(
             orderTimeTextView.text = ordersData.orderTime
             totalPriceTextView.text = ordersData.totalPrice.toString() + "円"
             orderStatusTextView.text = ordersData.orderStatus
-            if (ordersData.payMethod == "unpaid"){
-                payTextView.text = "未払い"
-            }
+            payTextView.text = ordersData.payMethod
+
             binding.btnStatusChange.setOnClickListener {
+                binding.btnStatusChange.visibility = View.INVISIBLE
+                binding.btnDelete.visibility = View.INVISIBLE
+                AlertDialog.Builder(fragmentStatus.requireContext())
+                    .setTitle("確認")
+                    .setMessage("更新しますか？")
+                    .setPositiveButton("はい") { dialog, _ ->
                 CoroutineScope(Dispatchers.Main).launch {
                     val newStatus = "offered"
                     orderViewModel.updateStatus(dataset[position].id, newStatus)
                 }
+                        Toast.makeText(fragmentStatus.context, "更新しました！", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("いいえ") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
+
+
             binding.btnDelete.setOnClickListener {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val newStatus = "canceled"
-                    orderViewModel.cancelOrder(dataset[position].id, newStatus)
-                }
+                binding.btnStatusChange.visibility = View.INVISIBLE
+                binding.btnDelete.visibility = View.INVISIBLE
+
+                AlertDialog.Builder(fragmentStatus.requireContext())
+                    .setTitle("確認")
+                    .setMessage("更新しますか？")
+                    .setPositiveButton("はい") { dialog, _ ->
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val newStatus = "canceled"
+                            orderViewModel.cancelOrder(dataset[position].id, newStatus)
+                        }
+                        Toast.makeText(fragmentStatus.context, "キャンセルしました！", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("いいえ") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
+
+
             binding.btnDetail.setOnClickListener {
                 onDetailButtonClickListener.onDetailButtonClick(ordersData.orderId)
             }
@@ -65,7 +99,7 @@ class StatusAdapter(
         return StatusDataViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: StatusDataViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: StatusAdapter.StatusDataViewHolder, position: Int) {
         val item = dataset[position]
         holder.bind(item)
     }

@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.posapp.adapter.DetailAdapter
 import com.example.posapp.adapter.StatusAdapter
 import com.example.posapp.data.MenuData
 import com.example.posapp.data.MyRoomDatabase
-import com.example.posapp.data.OrdersData
 import com.example.posapp.databinding.FragmentStatusBinding
 import com.example.posapp.viewModel.MenuViewModel
 import com.example.posapp.viewModel.MenuViewModelFactory
@@ -57,10 +57,10 @@ class FragmentStatus : Fragment(), StatusAdapter.OnDetailButtonClickListener {
         }
 
         // Khởi tạo StatusAdapter
-        statusAdapter = StatusAdapter(mutableListOf(),orderViewModel, this)
+        statusAdapter = StatusAdapter(mutableListOf(), orderViewModel,this)
 
         // Khởi tạo DetailAdapter
-        detailAdapter = DetailAdapter(requireContext(), mutableListOf(), menuDataList)
+        detailAdapter = DetailAdapter(menuDataList)
 
         // Thiết lập adapter cho RecyclerView status
         binding.recyclerviewStatus.adapter = statusAdapter
@@ -82,6 +82,12 @@ class FragmentStatus : Fragment(), StatusAdapter.OnDetailButtonClickListener {
         orderViewModel.orderFoodItemsByOrderId(orderId).observe(viewLifecycleOwner) { orderFoodItems ->
             detailAdapter.submitList(orderFoodItems)
         }
+    }
+
+    private fun navigateToFragmentOrder(orderId: Int) {
+        val action = R.id.action_fragmentStatus_to_fragmentOrders
+        val bundle = bundleOf("orderId" to orderId)
+        findNavController().navigate(action, bundle)
     }
 
     override fun onDestroyView() {

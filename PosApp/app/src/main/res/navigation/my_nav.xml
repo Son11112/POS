@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_fragmentHome_to_fragmentSalesAnalysis"
             app:destination="@id/fragmentSalesAnalysis" />
+        <action
+            android:id="@+id/action_fragmentHome_to_fragmentAddShift"
+            app:destination="@id/fragmentAddShift" />
     </fragment>
     <fragment
         android:id="@+id/fragmentUsers"
@@ -122,6 +125,9 @@
         <action
             android:id="@+id/action_fragmentAddShift_to_fragmentShifts"
             app:destination="@id/fragmentShifts" />
+        <action
+            android:id="@+id/action_fragmentAddShift_to_fragmentHome"
+            app:destination="@id/fragmentHome" />
     </fragment>
     <fragment
         android:id="@+id/fragmentSalesAnalysis"
@@ -164,6 +170,9 @@
         <action
             android:id="@+id/action_fragmentOrders_to_fragmentPay"
             app:destination="@id/fragmentPay" />
+        <argument
+            android:name="orderId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/fragmentPay"
@@ -185,5 +194,8 @@
         <action
             android:id="@+id/action_fragmentStatus_to_fragmentOrders"
             app:destination="@id/fragmentOrders" />
+        <argument
+            android:name="orderId"
+            app:argType="integer" />
     </fragment>
 </navigation>

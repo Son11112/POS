@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -89,11 +92,7 @@ class FragmentOrders : Fragment() {
                     val selectedItems = orderAdapter.getSelectedItems()
                     if (selectedItems.isNotEmpty()) {
                         val menuItems = selectedItems.map { it.first }
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    insertOrder(menuItems)
-                                    Toast.makeText(context, "新しい注文を追加しました", Toast.LENGTH_SHORT)
-                                        .show()
-                        }
+                        showDialogAdd(menuItems)
                     } else {
                         Toast.makeText(context, "カートが空です", Toast.LENGTH_LONG).show()
                     }
@@ -154,9 +153,29 @@ class FragmentOrders : Fragment() {
             )
             orderViewModel.insertOrderItem(orderFoodItem)
             menuViewModel.updateQuantityInStock(menuItem.id, menuItem.productQuantity-quantityInCart)
+            binding.edtTableNumBer.setText("")
         }
     }
-    
+
+    private fun showDialogAdd(menuItems: List<MenuData>) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("新しい注文内容確認")
+        builder.setMessage("注文内容はこれでよろしいですか?")
+
+        builder.setPositiveButton("注文送信") { _, _ ->
+            CoroutineScope(Dispatchers.Main).launch {
+                insertOrder(menuItems)
+                Toast.makeText(context, "新しい注文を追加しました", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+        builder.setNegativeButton("キャンセル") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

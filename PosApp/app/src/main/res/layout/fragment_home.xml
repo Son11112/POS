@@ -142,6 +142,34 @@
                     app:layout_constraintVertical_bias="0.148" />
 
                 <TextView
+                    android:id="@+id/textView43"
+                    android:layout_width="107dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:text="2位:"
+                    android:textColor="@color/black"
+                    android:textSize="40dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView39"
+                    app:layout_constraintVertical_bias="0.491" />
+
+                <TextView
+                    android:id="@+id/textView44"
+                    android:layout_width="107dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:text="3位:"
+                    android:textColor="@color/black"
+                    android:textSize="40dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView39"
+                    app:layout_constraintVertical_bias="0.854" />
+
+                <TextView
                     android:id="@+id/tvDay"
                     android:layout_width="270dp"
                     android:layout_height="60dp"
@@ -156,18 +184,46 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/sold"
+                    android:id="@+id/tvSoldOne"
                     android:layout_width="270dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="16dp"
                     android:gravity="center"
-                    android:text="500,000"
+                    android:text="無し"
                     android:textColor="@color/black"
                     android:textSize="40dp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView40"
                     app:layout_constraintStart_toEndOf="@+id/textView40"
                     app:layout_constraintTop_toTopOf="@+id/textView40"
                     app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/tvSoldTwo"
+                    android:layout_width="270dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:text="無し"
+                    android:textColor="@color/black"
+
+                    android:textSize="40dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView43"
+                    app:layout_constraintStart_toEndOf="@+id/textView43"
+                    app:layout_constraintTop_toTopOf="@+id/textView43"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/tvSoldThree"
+                    android:layout_width="270dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:gravity="center"
+                    android:text="無し"
+                    android:textColor="@color/black"
+                    android:textSize="40dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView44"
+                    app:layout_constraintStart_toEndOf="@+id/textView44"
+                    app:layout_constraintTop_toTopOf="@+id/textView44" />
 
                 <TextView
                     android:id="@+id/textView8"

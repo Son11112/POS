@@ -38,16 +38,6 @@ interface OrderFoodItemDao {
     @Query("UPDATE orders_food_items SET quantity_in_cart = :quantity WHERE id = :id")
     suspend fun updateQuantityInCart(id: Int, quantity: Int)
 
-//    @Query("""
-//    SELECT food_item_id as foodItemId, name as productName, SUM(quantity_in_cart) as totalQuantitySold
-//    FROM orders_food_items
-//    WHERE order_id >= :startDate AND order_id <= :endDate
-//    GROUP BY food_item_id, name
-//    ORDER BY totalQuantitySold DESC
-//    LIMIT :numOfItems
-//""")
-//    fun getTopSellingItemsInPeriod(startDate: String, endDate: String, numOfItems: Int): LiveData<List<TopSellingItem>>
-
     @Query("SELECT * FROM orders_food_items WHERE order_id = :orderId")
     suspend fun getOrderFoodItemsByOrderId(orderId: String): List<OrderFoodItem>
 

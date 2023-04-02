@@ -7,34 +7,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.posapp.adapter.PayAdapter
 import com.example.posapp.data.MenuData
 import com.example.posapp.data.MyRoomDatabase
-import com.example.posapp.data.OrderFoodItem
 import com.example.posapp.data.OrdersData
 import com.example.posapp.databinding.FragmentPayBinding
-import com.example.posapp.viewModel.MenuViewModel
-import com.example.posapp.viewModel.MenuViewModelFactory
 import com.example.posapp.viewModel.OrderViewModel
 import com.example.posapp.viewModel.OrderViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 
-class FragmentPay : Fragment() {
-
+class FragmentPay : Fragment(), PayAdapter.OnCheckedChangeListener{
     private lateinit var payAdapter: PayAdapter
     private lateinit var orderViewModel: OrderViewModel
     private lateinit var _binding: FragmentPayBinding
     private val binding get() = _binding
-    val menuData = mutableListOf<MenuData>()
+    private val selectedItems = mutableSetOf<OrdersData>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,17 +35,47 @@ class FragmentPay : Fragment() {
         return binding.root
     }
 
+    private fun updatePaymentMethodVisibility() {
+        if (binding.btnCash.isChecked) {
+            binding.edtDepositAmount.visibility = View.VISIBLE
+            binding.tvDepositAmount.visibility = View.VISIBLE
+            binding.edtChange.visibility = View.VISIBLE
+            binding.tvChange.visibility = View.VISIBLE
+            binding.imvPayPay.visibility = View.GONE
+        } else {
+            binding.imvPayPay.visibility = View.VISIBLE
+            binding.edtDepositAmount.visibility = View.GONE
+            binding.tvDepositAmount.visibility = View.GONE
+            binding.edtChange.visibility = View.GONE
+            binding.tvChange.visibility = View.GONE
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Đọc dữ liệu từ database vào biến menuData
-        val db = MyRoomDatabase.getDatabase(requireContext())
-        val menuDao = db.menuDao()
-        menuDao.getItems().observe(viewLifecycleOwner) { menu ->
-            menuData.addAll(menu)
+        binding.paymentRadioGroup.setOnCheckedChangeListener { _, _ ->
+            updatePaymentMethodVisibility()
         }
 
-        // Khởi tạo ViewModel
+        val onCheckedChangeListener = object : PayAdapter.OnCheckedChangeListener {
+            override fun onItemChecked(item: OrdersData, isChecked: Boolean) {
+                if (isChecked) {
+                    selectedItems.add(item)
+                } else {
+                    selectedItems.remove(item)
+                }
+                val totalPrice = selectedItems.sumBy { it.totalPrice }
+                binding.paymentAmountEditText.setText(totalPrice.toString())
+            }
+        }
+
+        val db = MyRoomDatabase.getDatabase(requireContext())
+        val orderDao = db.orderDao()
+        orderDao.getItems().observe(viewLifecycleOwner) { ordersData ->
+            payAdapter.updateDataset(ordersData)
+        }
+
         val orderFactory = OrderViewModelFactory(
             MyRoomDatabase.getDatabase(requireContext()).orderDao(),
             MyRoomDatabase.getDatabase(requireContext()).orderFoodItemDao(),
@@ -62,18 +83,46 @@ class FragmentPay : Fragment() {
         )
         orderViewModel = ViewModelProvider(this, orderFactory).get(OrderViewModel::class.java)
 
-        payAdapter = PayAdapter(mutableListOf())
+        payAdapter = PayAdapter(mutableListOf(), onCheckedChangeListener)
         binding.recyclerviewPay.adapter = payAdapter
 
-      var totalPrice = 0
-
         binding.btnCash.isChecked = true
-        binding.btnStatus.isEnabled = false
-        if (binding.paymentAmountEditText.text.isEmpty()){
-            binding.edtDepositAmount.visibility = View.GONE
-        }else{
+
+        if (binding.paymentAmountEditText.text.toString().toInt() != 0){
             binding.edtDepositAmount.visibility = View.VISIBLE
+        }else{
+            binding.edtDepositAmount.visibility = View.GONE
         }
+
+         fun calculateChange() {
+            val paymentAmount = binding.paymentAmountEditText.text.toString().toIntOrNull() ?: 0
+            val depositAmount = binding.edtDepositAmount.text.toString().toIntOrNull() ?: 0
+
+            val changeNumber = depositAmount - paymentAmount
+            if (changeNumber > 0) {
+                binding.edtChange.text = changeNumber.toString() + "円"
+            } else {
+                binding.edtChange.text = "0円"
+            }
+        }
+
+
+        binding.paymentAmountEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                val paymentAmount = s.toString().toIntOrNull() ?: 0
+                if (paymentAmount != 0) {
+                    binding.edtDepositAmount.visibility = View.VISIBLE
+                } else {
+                    binding.edtDepositAmount.visibility = View.GONE
+                }
+                calculateChange()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         binding.edtDepositAmount.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -81,58 +130,8 @@ class FragmentPay : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 calculateChange()
             }
-
-            private fun calculateChange() {
-                val depositAmount = binding.edtDepositAmount.text.toString()
-                if (depositAmount.isNotEmpty()) {
-                    val changeNumber = depositAmount.toInt() - totalPrice.toString().toInt()
-                    if (changeNumber > 0) {
-                        binding.edtChange.text = changeNumber.toString() + "円"
-                    } else {
-                        binding.edtChange.text = "0円"
-                    }
-                } else {
-                    binding.edtChange.text = "0円"
-                }
-            }
             override fun afterTextChanged(s: Editable?) {}
         })
-
-        binding.btnCash.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (binding.btnCash.isChecked) {
-                binding.edtDepositAmount.visibility = View.VISIBLE
-                binding.tvDepositAmount.visibility = View.VISIBLE
-                binding.edtChange.visibility = View.VISIBLE
-                binding.tvChange.visibility = View.VISIBLE
-                binding.imvPayPay.visibility = View.GONE
-            } else {
-                binding.imvPayPay.visibility = View.VISIBLE // Hiển thị imageView
-                binding.edtDepositAmount.visibility = View.GONE // Ẩn editTextNumber
-                binding.tvDepositAmount.visibility = View.GONE // Ẩn editTextNumber
-                binding.edtChange.visibility = View.GONE
-                binding.tvChange.visibility = View.GONE
-            }
-        }
-
-        binding.btnSearch.setOnClickListener {
-            binding.btnPay.isEnabled = true
-            if (binding.edtTableNumBerPay.text.isNotEmpty()) {
-                val tableNumber = binding.edtTableNumBerPay.text.toString().toInt()
-
-                orderViewModel.getUnpaidOrderByTableNumber(tableNumber).observe(viewLifecycleOwner) { order ->
-                    if (order != null) {
-                        binding.edtDepositAmount.visibility = View.VISIBLE
-
-                        val orderId = order.orderId
-                        orderViewModel.getOrderFoodItemDetailsByOrderId(orderId).observe(viewLifecycleOwner) { menuDataList ->
-                            payAdapter.submitList(menuDataList)
-                        }
-                    } else {
-                        Toast.makeText(context, "Không tìm thấy đơn hàng chưa thanh toán cho bàn này", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
 
         binding.btnCancel.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentPay_to_fragmentOrders)
@@ -142,16 +141,18 @@ class FragmentPay : Fragment() {
             if (binding.btnCash.isChecked) {
                 if (binding.edtDepositAmount.text.toString().isNotEmpty()) {
                     val changeNumber =
-                        binding.edtDepositAmount.text.toString().toInt() - totalPrice.toString()
-                            .toInt()
+                        binding.edtDepositAmount.text.toString().toInt() -  binding.paymentAmountEditText.text.toString().toInt()
                     if (changeNumber >= 0) {
                         binding.btnStatus.visibility = View.VISIBLE
                         Toast.makeText(context, "注文を確定しました", Toast.LENGTH_SHORT).show()
-                        binding.btnStatus.isEnabled = true
                         binding.btnPayPay.isEnabled = false
                         binding.btnCash.isEnabled = false
-                        binding.btnCancel.isEnabled = false
                         binding.btnPay.isEnabled = false
+
+                        for (selectedOrder in selectedItems) {
+                                selectedOrder.payMethod = "現金払い"
+                            orderViewModel.updateOrder(selectedOrder)
+                        }
                     } else {
                         Toast.makeText(context, "お金が足りませんでした！", Toast.LENGTH_SHORT).show()
                     }
@@ -163,6 +164,10 @@ class FragmentPay : Fragment() {
                 binding.btnCash.isEnabled = false
                 binding.btnPay.isEnabled = false
                 Toast.makeText(context, "注文を確定しました", Toast.LENGTH_SHORT).show()
+                for (selectedOrder in selectedItems) {
+                    selectedOrder.payMethod = "paypay払い"
+                    orderViewModel.updateOrder(selectedOrder)
+                }
             }
         }
 
@@ -176,7 +181,6 @@ class FragmentPay : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
 
-        // Nếu nút thanh toán bằng tiền mặt được chọn, ẩn imageView và hiển thị editTextNumber
         if (binding.btnCash.isChecked) {
             binding.edtDepositAmount.visibility = View.VISIBLE
             binding.tvDepositAmount.visibility = View.VISIBLE
@@ -190,5 +194,15 @@ class FragmentPay : Fragment() {
             binding.edtChange.visibility = View.GONE
             binding.tvChange.visibility = View.GONE
         }
+    }
+
+    override fun onItemChecked(item: OrdersData, isChecked: Boolean) {
+        if (isChecked) {
+            selectedItems.add(item)
+        } else {
+            selectedItems.remove(item)
+        }
+        val totalPrice = selectedItems.sumBy { it.totalPrice }
+        binding.paymentAmountEditText.setText(totalPrice.toString())
     }
 }

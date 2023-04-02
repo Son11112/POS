@@ -1,7 +1,7 @@
 package com.example.posapp.data
 
 data class TopSellingItem(
-    val foodItemId: Int,
-    val productName: String,
-    val totalQuantitySold: Int
+    val id: Int,
+    val name: String,
+    val totalSold: Int
 )

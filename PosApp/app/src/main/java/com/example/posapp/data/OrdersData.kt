@@ -15,11 +15,11 @@ data class OrdersData(
     @ColumnInfo(name = "total_price")
     var totalPrice: Int,
     @ColumnInfo(name = "order_date")
-    val orderDate: String,
+    var orderDate: String,
     @ColumnInfo(name = "order_time")
-    val orderTime: String,
+    var orderTime: String,
     @ColumnInfo(name = "table_number")
-    val tableNumber: Int,
+    var tableNumber: Int,
     @ColumnInfo(name = "pay_method")
-    val payMethod: String
+    var payMethod: String
 )

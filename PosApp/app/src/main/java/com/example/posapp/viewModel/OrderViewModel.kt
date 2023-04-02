@@ -7,6 +7,7 @@ import com.example.posapp.dao.OrderFoodItemDao
 import com.example.posapp.data.MenuData
 import com.example.posapp.data.OrderFoodItem
 import com.example.posapp.data.OrdersData
+import com.example.posapp.data.TopSellingItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,7 +23,7 @@ class OrderViewModel(
     val totalRevenueThisMonth = orderDao.getTotalPriceMonth()
 
     fun getAllOrders(): LiveData<List<OrdersData>> {
-        return orderDao.getAllOrders()
+        return orderDao.getItems()
     }
 
     fun insertOrder(ordersData: OrdersData) {
@@ -34,6 +35,12 @@ class OrderViewModel(
     fun insertOrderItem(orderFoodItem: OrderFoodItem) {
         viewModelScope.launch {
             orderFoodItemDao.insert(orderFoodItem)
+        }
+    }
+
+    fun updateOrder(order: OrdersData) {
+        viewModelScope.launch {
+            orderDao.updateOrder(order)
         }
     }
 
@@ -65,14 +72,12 @@ class OrderViewModel(
         return orderFoodItemDao.orderFoodItemsByOrderId(orderId)
     }
 
-    suspend fun insertOrUpdateOrderItem(orderFoodItem: OrderFoodItem) {
+    suspend fun updateOrderItem(orderFoodItem: OrderFoodItem) {
         val existingItem =
             orderFoodItemDao.getOrderFoodItem(orderFoodItem.orderId, orderFoodItem.foodItemId)
         if (existingItem != null) {
             existingItem.quantityInCart += orderFoodItem.quantityInCart
             orderFoodItemDao.update(existingItem)
-        } else {
-            orderFoodItemDao.insert(orderFoodItem)
         }
     }
 
@@ -82,27 +87,8 @@ class OrderViewModel(
         }
     }
 
-    fun getUnpaidOrderByTableNumber(tableNumber: Int): LiveData<OrdersData?> {
-        return orderDao.getUnpaidOrderByTableNumber(tableNumber)
-    }
-
-    fun getOrderFoodItemDetailsByOrderId(orderId: String): LiveData<List<MenuData>> {
-        val orderFoodItems = orderFoodItemsByOrderId(orderId)
-        val menuDataList = MediatorLiveData<List<MenuData>>()
-
-        menuDataList.addSource(orderFoodItems) { items ->
-            viewModelScope.launch {
-                val menuDataItems = mutableListOf<MenuData>()
-                for (item in items) {
-                    val menuData = menuDao.getMenuDataByFoodItemId(item.foodItemId).value
-                    if (menuData != null) {
-                        menuDataItems.add(menuData)
-                    }
-                }
-                menuDataList.postValue(menuDataItems)
-            }
-        }
-        return menuDataList
+    suspend fun getTopThreeSoldItems(): List<TopSellingItem> {
+        return menuDao.getTopThreeSoldItems()
     }
 
 }
