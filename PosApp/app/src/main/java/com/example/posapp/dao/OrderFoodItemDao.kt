@@ -32,11 +32,8 @@ interface OrderFoodItemDao {
     @Query("DELETE FROM orders_food_items WHERE order_id = :order_id")
     fun deleteByOrderId(order_id: Int)
 
-//    @Query("SELECT SUM(order_product_price) FROM orders_food_items WHERE order_id = :order_id")
-//    fun getTotalPriceByOrderId(order_id: Int): Int
-
-    @Query("UPDATE orders_food_items SET quantity_in_cart = :quantity WHERE id = :id")
-    suspend fun updateQuantityInCart(id: Int, quantity: Int)
+    @Query("UPDATE orders_food_items SET quantity_in_cart = :quantityInCart WHERE id = :id")
+    suspend fun updateQuantityInCart(id: Int, quantityInCart: Int)
 
     @Query("UPDATE orders_food_items SET quantity_in_cart = :quantity WHERE order_id = :orderId")
     suspend fun update(orderId: String, quantity: Int)
@@ -52,4 +49,5 @@ interface OrderFoodItemDao {
 
     @Query("SELECT * FROM orders_food_items WHERE order_id = :orderId AND food_item_id = :foodItemId")
     suspend fun getOrderFoodItem(orderId: String, foodItemId: Int): OrderFoodItem?
+
 }

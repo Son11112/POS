@@ -60,7 +60,7 @@ class FragmentStatus : Fragment(), StatusAdapter.OnDetailButtonClickListener {
         statusAdapter = StatusAdapter(mutableListOf(), orderViewModel,this,this)
 
         // Khởi tạo DetailAdapter
-        detailAdapter = DetailAdapter(menuDataList)
+        detailAdapter = DetailAdapter(menuDataList, orderViewModel)
 
         // Thiết lập adapter cho RecyclerView status
         binding.recyclerviewStatus.adapter = statusAdapter
@@ -82,12 +82,6 @@ class FragmentStatus : Fragment(), StatusAdapter.OnDetailButtonClickListener {
         orderViewModel.orderFoodItemsByOrderId(orderId).observe(viewLifecycleOwner) { orderFoodItems ->
             detailAdapter.submitList(orderFoodItems)
         }
-    }
-
-    private fun navigateToFragmentOrder(orderId: Int) {
-        val action = R.id.action_fragmentStatus_to_fragmentOrders
-        val bundle = bundleOf("orderId" to orderId)
-        findNavController().navigate(action, bundle)
     }
 
     override fun onDestroyView() {

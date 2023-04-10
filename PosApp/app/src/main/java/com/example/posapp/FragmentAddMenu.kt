@@ -29,16 +29,11 @@ class FragmentAddMenu : Fragment() {
     private lateinit var imageView: ImageView
     private var productKinds: String = ""
     private var productType: String = ""
-//    private var tempQuantityInCart: Int = 0
     private var selectedCheckbox: CheckBox? = null
     private var _binding: FragmentAddMenuBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MenuViewModel by activityViewModels {
-        MenuViewModelFactory(
-            MyRoomDatabase.getDatabase(requireContext()).menuDao()
-        )
-    }
+    private lateinit var viewModel: MenuViewModel
 
     companion object {
         const val PICK_IMAGE_REQUEST = 1
@@ -85,6 +80,7 @@ class FragmentAddMenu : Fragment() {
         binding.btnExit.setOnClickListener {
             findNavController().navigate(R.id.action_fragmentAddMenu_to_fragmentMenu)
         }
+
         binding.btnAddMenu.setOnClickListener {
              val edtName = binding.edtProductName
              val edtPrice = binding.edtPrice

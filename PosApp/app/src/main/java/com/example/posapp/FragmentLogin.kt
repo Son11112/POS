@@ -54,12 +54,12 @@ class FragmentLogin : Fragment() {
             }
         }
 
-        binding.btnAd.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentAdminLogin)
-        }
-        binding.btnStaff.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentOrders)
-        }
+//        binding.btnAd.setOnClickListener {
+//            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentAdminLogin)
+//        }
+//        binding.btnStaff.setOnClickListener {
+//            findNavController().navigate(R.id.action_fragmentLogin_to_fragmentOrders)
+//        }
     }
 
     private suspend fun getRoleByEmployeeCode(employeeCode: String): Boolean {

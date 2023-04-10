@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -98,7 +96,7 @@ class FragmentOrders : Fragment() {
                     }
                 }
             } else {
-                Toast.makeText(context, "テーブル番号を入れてください", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "テーブル番号を入れてください", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -125,7 +123,6 @@ class FragmentOrders : Fragment() {
             findNavController().navigate(R.id.action_fragmentOrders_to_fragmentPay)
         }
     }
-
 
     private suspend fun insertOrder(selectedItems: List<MenuData>) {
         val tableNumber = binding.edtTableNumBer.text.toString().toInt()
@@ -154,6 +151,7 @@ class FragmentOrders : Fragment() {
             orderViewModel.insertOrderItem(orderFoodItem)
             menuViewModel.updateQuantityInStock(menuItem.id, menuItem.productQuantity-quantityInCart)
             binding.edtTableNumBer.setText("")
+            orderAdapter.resetTempQuantityMap()
         }
     }
 
@@ -165,9 +163,10 @@ class FragmentOrders : Fragment() {
         builder.setPositiveButton("注文送信") { _, _ ->
             CoroutineScope(Dispatchers.Main).launch {
                 insertOrder(menuItems)
-                Toast.makeText(context, "新しい注文を追加しました", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "新しい注文を追加しました", Toast.LENGTH_SHORT)
                     .show()
             }
+//            findNavController().navigate(R.id.action_fragmentOrders_to_fragmentStatus)
         }
         builder.setNegativeButton("キャンセル") { dialog, _ ->
             dialog.dismiss()
@@ -175,7 +174,6 @@ class FragmentOrders : Fragment() {
         val alertDialog = builder.create()
         alertDialog.show()
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

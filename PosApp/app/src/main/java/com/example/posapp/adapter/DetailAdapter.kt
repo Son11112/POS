@@ -19,7 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailAdapter(
-    var menuDataList: List<MenuData>
+    private var menuDataList: List<MenuData>,
+    private var orderViewModel: OrderViewModel
 ): RecyclerView.Adapter<DetailAdapter.DetailViewHolder>() {
 
     private var orderFoodItems: List<OrderFoodItem> = listOf()
@@ -28,11 +29,36 @@ class DetailAdapter(
         private val nameDetailTextView = binding.tvNameMenu
         private val priceDetailTextView = binding.tvPriceMenu
         private val quantityDetailTextView = binding.tvQuantityInOrder
+//        private val quantityInStockTextView = binding.tvQuantityInStock
 
         fun bind(menuData: MenuData, orderFoodItem: OrderFoodItem) {
             nameDetailTextView.text = menuData.productName
             priceDetailTextView.text = menuData.productPrice.toString()
             quantityDetailTextView.text = orderFoodItem.quantityInCart.toString()
+//            quantityInStockTextView.text = menuData.productQuantity.toString()
+
+//            binding.btnPlus.setOnClickListener {
+//                if (quantityDetailTextView.text.toString().toInt() < quantityInStockTextView.text.toString().toInt()) {
+//                    val newQuantity = quantityDetailTextView.text.toString().toInt() + 1
+//                    binding.tvQuantityInOrder.text = newQuantity.toString()
+//                }
+//            }
+//
+//            binding.btnMinus.setOnClickListener {
+//                if (quantityDetailTextView.text.toString().toInt()>0){
+//                    val newQuantity = quantityDetailTextView.text.toString().toInt() - 1
+//                    binding.tvQuantityInOrder.text = newQuantity.toString()
+//                }
+//            }
+//            binding.btnUpdateMenu.setOnClickListener {
+//                var newQuantity = binding.tvQuantityInOrder.text.toString().toInt()
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    orderViewModel.updateQuantityInCart(
+//                        menuDataList[position].id,
+//                        newQuantity
+//                    )
+//                }
+//            }
         }
     }
 

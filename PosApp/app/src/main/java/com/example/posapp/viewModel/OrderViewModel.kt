@@ -56,8 +56,10 @@ class OrderViewModel(
         }
     }
 
-    fun getOrderById(orderId: String): LiveData<List<OrdersData>> {
-        return orderDao.getOrderById(orderId)
+    suspend fun updateQuantityInCart(id: Int, quantityInCart: Int) {
+        withContext(Dispatchers.IO) {
+            orderFoodItemDao.updateQuantityInCart(id, quantityInCart)
+        }
     }
 
     suspend fun getOrderFoodItemsByOrderId(orderId: String): List<OrderFoodItem> {

@@ -55,9 +55,9 @@ class FragmentAdminLogin : Fragment() {
             findNavController().navigate(R.id.action_fragmentAdminLogin_to_fragmentLogin)
         }
 
-        binding.button.setOnClickListener {
-            findNavController().navigate(R.id.action_fragmentAdminLogin_to_fragmentHome)
-        }
+//        binding.button.setOnClickListener {
+//            findNavController().navigate(R.id.action_fragmentAdminLogin_to_fragmentHome)
+//        }
     }
 
     private suspend fun getUserByEmployeeCode(password: String): UserData? {

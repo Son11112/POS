@@ -93,4 +93,9 @@ class OrderAdapter(
         return dataset.filter { tempQuantityMap[it.id] != null && tempQuantityMap[it.id]!! > 0 }
             .map { it to tempQuantityMap[it.id]!! }
     }
+
+    fun resetTempQuantityMap() {
+        tempQuantityMap.clear()
+        notifyDataSetChanged()
+    }
 }
